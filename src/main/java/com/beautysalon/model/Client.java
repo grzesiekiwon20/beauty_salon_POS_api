@@ -20,6 +20,9 @@ public class Client extends Person {
     @GeneratedValue
     private Integer id;
 
+    @Column(name = "client_id")
+    private long client_id;
+
 
     public String getFirstName() {
         return super.getFirstName();
