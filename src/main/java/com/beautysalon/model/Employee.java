@@ -1,9 +1,6 @@
 package com.beautysalon.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -13,14 +10,28 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "employee")
 public class Employee extends Person{
+
     @Id
     @GeneratedValue
     private Integer id;
 
+
+    public String getFirstName() {
+        return super.getFirstName();
+    }
+    public String getLastName() {
+        return super.getLastName();
+    }
+    public String getEmail() {
+        return super.getEmail();
+    }
+    public String getPhoneNumber() {
+        return super.getPhoneNumber();
+    }
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
