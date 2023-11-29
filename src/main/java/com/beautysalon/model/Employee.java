@@ -32,6 +32,27 @@ public class Employee extends Person{
     public String getPhoneNumber() {
         return super.getPhoneNumber();
     }
+
+    @Override
+    public void setFirstName(String firstName) {
+        super.setFirstName(firstName);
+    }
+
+    @Override
+    public void setLastName(String lastName) {
+        super.setLastName(lastName);
+    }
+
+    @Override
+    public void setEmail(String email) {
+        super.setEmail(email);
+    }
+
+    @Override
+    public void setPhoneNumber(String phoneNumber) {
+        super.setPhoneNumber(phoneNumber);
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
