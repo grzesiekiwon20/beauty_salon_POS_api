@@ -14,8 +14,8 @@ import java.util.List;
 @Data
 public class ClientResponse {
 
-        private Long id;
+        private Integer id;
         private String name;
         private String email;
-        private List<Long> bookings;
+        private List<Integer> bookings;
 }

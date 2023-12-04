@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 
-@Data
+@ToString
+@Getter
+@Setter
+@Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,7 +17,7 @@ public class Booking {
     @Id
     @GeneratedValue
     @Column(name = "BOOKING_ID")
-    private Long id;
+    private Integer id;
     @Column(name = "DATE")
     private String date;
     @Column(name = "START_TIME")
@@ -23,14 +26,8 @@ public class Booking {
     private String endTime;
     @Column(name = "SERVICE_TYPE")
     private String serviceType;
+
     @Column(name = "USER_ID")
-    private Long userId;
+    private Integer clientId;
 
-    public Booking(String date, String startTime, String endTime, String serviceType) {
-        this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.serviceType = serviceType;
-
-    }
 }

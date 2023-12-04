@@ -3,11 +3,14 @@ package com.beautysalon.repository.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -28,57 +31,29 @@ public class Client{
     private List<Booking> bookings;
 
 
-    public String getDateOfBooking() {
-        if(!bookings.isEmpty()) {
-            return bookings.get(0).getDate();
-        }
-        return null;
-    }
-    public void setDateOfBooking(String newDate) {
-        if(!bookings.isEmpty()) {
-            bookings.get(0).setDate(newDate);
-        }
-    }
-    public String getStartTimeOfBooking() {
-        if(!bookings.isEmpty()) {
-            return bookings.get(1).getStartTime();
-        }
-        return null;
-    }
-    public void setStartTimeOfBooking(String newStartTime) {
-        if(!bookings.isEmpty()) {
-            bookings.get(1).setStartTime(newStartTime);
-        }
-    }
-    public String getEndTimeOfBooking() {
-        if(!bookings.isEmpty()) {
-            return bookings.get(2).getEndTime();
-        }
-        return null;
-    }
-    public void setEndTimeOfBooking(String newEndTime) {
-        if(!bookings.isEmpty()) {
-            bookings.get(2).setEndTime(newEndTime);
-        }
-    }
-    public String getServiceTypeOfBooking() {
-        if(!bookings.isEmpty()) {
-            return bookings.get(3).getServiceType();
-        }
-        return null;
-    }
-    public void setServiceTypeOfBooking(String newServiceType) {
-        if(!bookings.isEmpty()) {
-            bookings.get(3).setServiceType(newServiceType);
-        }
-    }
-
     @Override
     public String toString() {
         return "Client{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", bookings=" + bookings +
                 '}';
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Client client = (Client) o;
+        return getId() != null && Objects.equals(getId(), client.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }
