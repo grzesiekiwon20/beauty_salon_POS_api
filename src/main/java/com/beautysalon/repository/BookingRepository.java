@@ -24,25 +24,25 @@ public interface BookingRepository extends ListCrudRepository<Booking, Integer> 
     List<Booking> findById(int id);
 
     /**
-     * Retrieve a booking by date.
+     * Retrieve bookings by date.
      *
      * @param date The date of the booking.
-     * @return Optional containing the booking with the given date (if exists).
+     * @return List of bookings with the given date.
      */
     @Query("SELECT b FROM Booking b WHERE b.date = ?1")
-    Optional<Booking> findByDate(String date);
+    List<Booking> findByDate(String date);
 
     /**
      * Retrieve a booking by start time.
      *
      * @param startTime The start time of the booking.
-     * @return Optional containing the booking with the given start time (if exists).
+     * @return List of bookings with the given start time.
      */
     @Query("SELECT b FROM Booking b WHERE b.startTime = ?1")
-    Optional<Booking> findByStartTime(String startTime);
+    List<Booking> findByStartTime(String startTime);
 
     /**
-     * Retrieve a list of bookings by end time.
+     * Retrieve bookings by end time.
      *
      * @param endTime The end time of the booking.
      * @return List of bookings with the given end time.
@@ -51,7 +51,7 @@ public interface BookingRepository extends ListCrudRepository<Booking, Integer> 
     List<Booking> findByEndTime(String endTime);
 
     /**
-     * Retrieve a list of bookings by service type.
+     * Retrieve bookings by service type.
      *
      * @param serviceType The service type of the booking.
      * @return List of bookings with the given service type.
