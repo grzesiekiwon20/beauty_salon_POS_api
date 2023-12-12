@@ -6,9 +6,6 @@ import com.beautysalon.repository.ClientRepository;
 import com.beautysalon.repository.model.Client;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -22,7 +19,11 @@ public class ClientService {
     }
 
     public void save(ClientRequest clientRequest) {
-        Client client = clientMapper.map(clientRequest);
+        final String email = clientRequest.getEmail();
+        if(clientRepository.existsByEmail(email)){
+            throw new RuntimeException("Client with this email already exists!");
+        }
+        final Client client = clientMapper.map(clientRequest);
         clientRepository.save(client);
     }
 

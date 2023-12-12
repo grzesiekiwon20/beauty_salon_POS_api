@@ -5,8 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -28,10 +29,7 @@ public class Client{
 
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "USER_ID")
-    private Set<Booking> bookings;
-
-
-
+    private List<Booking> bookings;
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

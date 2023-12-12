@@ -6,8 +6,6 @@ import com.beautysalon.repository.model.Booking;
 import com.beautysalon.repository.model.Client;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -24,7 +22,7 @@ public class ClientMapper {
                                 .getBookings()
                                 .stream()
                                 .map(Booking::getId)
-                                .collect(Collectors.toSet()))
+                                .collect(Collectors.toList()))
                 .build();
     }
 

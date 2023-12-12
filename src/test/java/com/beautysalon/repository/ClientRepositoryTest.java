@@ -1,12 +1,10 @@
-package com.beautysalon;
+package com.beautysalon.repository;
 
 
-import com.beautysalon.repository.ClientRepository;
 import com.beautysalon.repository.model.Client;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -14,7 +12,7 @@ import static org.mockito.Mockito.*;
 public class ClientRepositoryTest {
 
     private final ClientRepository repository = mock(ClientRepository.class);
-    private final Client client = new Client(1,"Greg","greg@wp.pl",new HashSet<>());
+    private final Client client = new Client(1,"Greg","greg@wp.pl",new ArrayList<>());
 
 
     @Test
