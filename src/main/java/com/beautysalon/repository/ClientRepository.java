@@ -1,12 +1,8 @@
 package com.beautysalon.repository;
 
 import com.beautysalon.repository.model.Client;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * Repository interface for managing Client entities.
@@ -28,14 +24,12 @@ public interface ClientRepository extends ListCrudRepository<Client, Integer> {
          * @param name The name of the client.
          * @return List of clients with the given name.
          */
-        List<Client> findByName(String name);
+        Client findByName(String name);
 
         /**
-         * Retrieve a page of clients by name.
          *
-         * @param name     The name of the client.
-         * @param pageable The pagination information.
-         * @return Page of clients with the given name.
+         * @param clientEmail The email of the client
+         * @return boolean if client with given email already exists
          */
-        Page<Client> findByName(String name, Pageable pageable);
+        boolean existsByEmail(String clientEmail);
 }
