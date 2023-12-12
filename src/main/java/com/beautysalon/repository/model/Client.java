@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,7 +18,7 @@ import java.util.Set;
 public class Client{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "USER_ID")
     private Integer id;
     @Column(name = "NAME")
