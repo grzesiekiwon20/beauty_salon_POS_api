@@ -7,18 +7,19 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Table(name = "USERS")
+@AllArgsConstructor
 public class Client{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "USER_ID")
     private Integer id;
     @Column(name = "NAME")
@@ -26,20 +27,11 @@ public class Client{
     @Column(name = "EMAIL")
     private String email;
 
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
-    private List<Booking> bookings;
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID")
+    private Set<Booking> bookings;
 
 
-    @Override
-    public String toString() {
-        return "Client{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", bookings=" + bookings +
-                '}';
-    }
 
     @Override
     public final boolean equals(Object o) {
@@ -55,5 +47,14 @@ public class Client{
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", bookings=" + bookings +
+                '}';
     }
 }

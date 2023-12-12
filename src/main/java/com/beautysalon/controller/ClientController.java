@@ -1,6 +1,7 @@
 package com.beautysalon.controller;
 
 import com.beautysalon.controller.dto.ClientRequest;
+import com.beautysalon.controller.dto.ClientResponse;
 import com.beautysalon.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,12 +30,10 @@ public class ClientController {
     }
 
     @GetMapping("/api/user/id")
-    public ResponseEntity<?> findById(@RequestParam Integer id) {
-        try {
+    public ResponseEntity<ClientResponse> findById(@RequestParam Integer id) {
+
             return new ResponseEntity<>(service.findResponseById(id), HttpStatus.ACCEPTED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
     }
 
     @DeleteMapping("/api/user")

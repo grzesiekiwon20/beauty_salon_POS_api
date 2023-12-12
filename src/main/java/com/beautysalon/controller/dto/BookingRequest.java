@@ -1,10 +1,15 @@
 package com.beautysalon.controller.dto;
 
 
+import com.beautysalon.repository.model.Client;
+import com.beautysalon.repository.model.ServiceType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+
 
 @Data
 @Builder
@@ -12,10 +17,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BookingRequest {
 
-    private String date;
-    private String startTime;
-    private String endTime;
-    private String serviceType;
-    private Integer userId;
+    private LocalDate date;
+    private ServiceType serviceType;
+    private String clientEmail;
+    private Integer clientId;
 
 }

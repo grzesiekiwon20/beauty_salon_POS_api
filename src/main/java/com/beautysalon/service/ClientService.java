@@ -6,7 +6,9 @@ import com.beautysalon.repository.ClientRepository;
 import com.beautysalon.repository.model.Client;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -40,7 +42,8 @@ public class ClientService {
         clientRepository.deleteById(id);
     }
 
-    public List<Client> findResponseByName(String name) {
-        return clientRepository.findByName(name);
+    public ClientResponse findResponseByName(String name) {
+        final Client client = clientRepository.findByName(name);
+        return clientMapper.map(client);
     }
 }
