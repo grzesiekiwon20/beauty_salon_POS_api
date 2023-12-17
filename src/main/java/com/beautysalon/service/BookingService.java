@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -26,8 +27,10 @@ public class BookingService {
         final Booking booking =
                 Booking.builder()
                         .date(bookingRequest.getDate())
-                        .clientEmail(bookingRequest.getClientEmail())
+                        .startTime(bookingRequest.getStartTime())
+                        .finishTime(bookingRequest.getFinishTime())
                         .serviceType(bookingRequest.getServiceType())
+                        .clientEmail(bookingRequest.getClientEmail())
                         .clientId(client.getId())
                         .build();
         if(clientRepository.existsByEmail(bookingRequest.getClientEmail())){
@@ -45,6 +48,8 @@ public class BookingService {
                         BookingResponse.builder()
                                 .id(booking.getId())
                                 .date(booking.getDate())
+                                .startTime(booking.getStartTime())
+                                .finishTime(booking.getFinishTime())
                                 .serviceType(booking.getServiceType())
                                 .clientEmail(booking.getClientEmail())
                                 .clientId(booking.getClientId())
@@ -53,7 +58,7 @@ public class BookingService {
                 .orElseThrow(() -> new IllegalArgumentException("Booking with id: " + id + " not found"));
     }
 
-    public List<Booking> findResponseByServiceType(ServiceType serviceType) {
+    public List<Booking>  findResponseByServiceType(ServiceType serviceType) {
         return repository.findByServiceType(serviceType);
     }
 
@@ -63,5 +68,13 @@ public class BookingService {
 
     public List<Booking>findByEmail(String email) {
         return repository.findResponseByEmail(email);
+    }
+
+    public List<Booking> findByStartTime(LocalTime localTime) {
+        return repository.findResponseByStartTime(localTime);
+    }
+
+    public List<Booking> findAll() {
+        return repository.findAll();
     }
 }

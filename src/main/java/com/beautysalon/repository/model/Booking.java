@@ -24,6 +24,7 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 
 
@@ -44,11 +45,26 @@ public class Booking {
     private String clientEmail;
     @Column(name = "DATE")
     private LocalDate date;
+    @Column(name = "START_TIME")
+    private LocalTime startTime;
+    @Column(name = "FINISH_TIME")
+    private LocalTime finishTime;
     @Column(name = "SERVICE_TYPE")
     private ServiceType serviceType;
     @Column(name = "USER_ID")
     private Integer clientId;
 
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "clientEmail='" + clientEmail + '\'' +
+                ", date=" + date +
+                ", startTime=" + startTime +
+                ", finishTime=" + finishTime +
+                ", serviceType=" + serviceType +
+                '}';
+    }
 
     @Override
     public final boolean equals(Object o) {
@@ -64,13 +80,5 @@ public class Booking {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "clientEmail = " + clientEmail + ", " +
-                "date = " + date + ", " +
-                "serviceType = " + serviceType + ")";
     }
 }

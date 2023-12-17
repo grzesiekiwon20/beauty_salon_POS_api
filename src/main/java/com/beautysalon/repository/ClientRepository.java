@@ -32,4 +32,6 @@ public interface ClientRepository extends ListCrudRepository<Client, Integer> {
          * @return boolean if client with given email already exists
          */
         boolean existsByEmail(String clientEmail);
+
+        boolean existsByName(String name);
 }

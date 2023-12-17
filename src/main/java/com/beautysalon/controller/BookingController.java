@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 
 @RestController
@@ -51,10 +52,26 @@ public class BookingController {
         }
     }
 
-    @GetMapping("api/booking/email")
-    public ResponseEntity<?> findServiceByEmail(String email){
+    @GetMapping("/api/booking/email")
+    public ResponseEntity<?> findByEmail(String email){
         try{
             return new ResponseEntity<>(service.findByEmail(email), HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/api/booking/startTime")
+    public ResponseEntity<?> findBookingsByStartTime(LocalTime localTime){
+        try{
+            return new ResponseEntity<>(service.findByStartTime(localTime), HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/api/booking")
+    public ResponseEntity<?> findAll(){
+        try{
+            return new ResponseEntity<>(service.findAll(), HttpStatus.ACCEPTED);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -7,6 +7,7 @@ import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -45,10 +46,19 @@ public interface BookingRepository extends ListCrudRepository<Booking, Integer> 
 
     /**
      * Retrieve bookings by email
+     *
      * @param email The clientEmail
      * @return Booking with the given email
      */
-    @Query("select b FROM Booking  b where b.clientEmail = ?1")
+    @Query("select b FROM Booking b where b.clientEmail = ?1")
     List<Booking> findResponseByEmail(String email);
+
+    /**
+     * Retrieve bookings by startTime
+     * @param localTime The startTime
+     * @return Bookings with the given startTime
+     */
+    @Query("select b FROM Booking b where b.startTime = ?1")
+    List<Booking> findResponseByStartTime(LocalTime localTime);
 
 }
