@@ -18,8 +18,8 @@ import java.time.LocalTime;
 public class BookingRequest {
 
     private LocalDate date;
-    private LocalTime startTime;
-    private LocalTime finishTime;
+    private String startTime;
+    private String finishTime;
     private ServiceType serviceType;
     private String clientEmail;
     private Integer clientId;

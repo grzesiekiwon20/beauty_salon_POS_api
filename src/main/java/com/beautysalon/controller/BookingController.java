@@ -61,9 +61,17 @@ public class BookingController {
         }
     }
     @GetMapping("/api/booking/startTime")
-    public ResponseEntity<?> findBookingsByStartTime(LocalTime localTime){
+    public ResponseEntity<?> findBookingsByStartTime(String startTime){
         try{
-            return new ResponseEntity<>(service.findByStartTime(localTime), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(service.findByStartTime(startTime), HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/api/booking/finishTime")
+    public ResponseEntity<?> findBookingsByFinishTime(String finishTime){
+        try{
+            return new ResponseEntity<>(service.findByFinishTime(finishTime), HttpStatus.ACCEPTED);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

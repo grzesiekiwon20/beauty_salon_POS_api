@@ -55,10 +55,17 @@ public interface BookingRepository extends ListCrudRepository<Booking, Integer> 
 
     /**
      * Retrieve bookings by startTime
-     * @param localTime The startTime
+     * @param startTime The startTime
      * @return Bookings with the given startTime
      */
     @Query("select b FROM Booking b where b.startTime = ?1")
-    List<Booking> findResponseByStartTime(LocalTime localTime);
+    List<Booking> findResponseByStartTime(String startTime);
 
+    /**
+     * Retrieve bookings by finishTime
+     * @param finishTime finishTime
+     * @return Bookings with the given finishTime
+     */
+    @Query("select b FROM Booking b where b.finishTime = ?1")
+    List<Booking> findResponseByFinishTime(String finishTime);
 }

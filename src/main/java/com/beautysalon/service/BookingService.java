@@ -23,21 +23,24 @@ public class BookingService {
     private final ClientRepository clientRepository;
 
     public void save(final BookingRequest bookingRequest) {
-        final Client client = clientRepository.findByEmail(bookingRequest.getClientEmail());
-        final Booking booking =
-                Booking.builder()
-                        .date(bookingRequest.getDate())
-                        .startTime(bookingRequest.getStartTime())
-                        .finishTime(bookingRequest.getFinishTime())
-                        .serviceType(bookingRequest.getServiceType())
-                        .clientEmail(bookingRequest.getClientEmail())
-                        .clientId(client.getId())
-                        .build();
-        if(clientRepository.existsByEmail(bookingRequest.getClientEmail())){
-            repository.save(booking);
-        }
-        else {
-            throw new RuntimeException("Booking can't be made without saving client first!");
+        if (getBookingAvailability(bookingRequest)) {
+            final Client client = clientRepository.findByEmail(bookingRequest.getClientEmail());
+            final Booking booking =
+                    Booking.builder()
+                            .date(bookingRequest.getDate())
+                            .startTime(bookingRequest.getStartTime())
+                            .finishTime(bookingRequest.getFinishTime())
+                            .serviceType(bookingRequest.getServiceType())
+                            .clientEmail(bookingRequest.getClientEmail())
+                            .clientId(client.getId())
+                            .build();
+            if (clientRepository.existsByEmail(bookingRequest.getClientEmail())) {
+                repository.save(booking);
+            } else {
+                throw new RuntimeException("Booking can't be made without saving client first!");
+            }
+        } else {
+            throw new RuntimeException("Booking times not available");
         }
     }
 
@@ -58,7 +61,7 @@ public class BookingService {
                 .orElseThrow(() -> new IllegalArgumentException("Booking with id: " + id + " not found"));
     }
 
-    public List<Booking>  findResponseByServiceType(ServiceType serviceType) {
+    public List<Booking> findResponseByServiceType(ServiceType serviceType) {
         return repository.findByServiceType(serviceType);
     }
 
@@ -66,15 +69,42 @@ public class BookingService {
         return repository.findByDate(date);
     }
 
-    public List<Booking>findByEmail(String email) {
+    public List<Booking> findByEmail(String email) {
         return repository.findResponseByEmail(email);
     }
 
-    public List<Booking> findByStartTime(LocalTime localTime) {
-        return repository.findResponseByStartTime(localTime);
+    public List<Booking> findByStartTime(String startTime) {
+        return repository.findResponseByStartTime(startTime);
     }
 
     public List<Booking> findAll() {
         return repository.findAll();
+    }
+
+    public List<Booking> findByFinishTime(String finishTime) {
+        return repository.findResponseByFinishTime(finishTime);
+    }
+
+    public boolean getBookingAvailability(BookingRequest request) {
+        List<Booking> bookings = repository.findByDate(request.getDate());
+        final LocalTime start = LocalTime.parse(request.getStartTime());
+        final LocalTime finish = LocalTime.parse(request.getFinishTime());
+
+        for (Booking booking : bookings) {
+            final LocalTime alreadyBookedStartTime = LocalTime.parse(booking.getStartTime());
+            final LocalTime alreadyBookedFinishTime = LocalTime.parse(booking.getFinishTime());
+
+            if (start.isAfter(alreadyBookedStartTime) && start.isBefore(alreadyBookedFinishTime)) {
+                return false;
+            }
+
+            if (start.equals(alreadyBookedStartTime)) {
+                return false;
+            }
+            if (finish.isBefore(start)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

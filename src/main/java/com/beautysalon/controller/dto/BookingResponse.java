@@ -18,8 +18,8 @@ public class BookingResponse {
 
     private Integer id;
     private LocalDate date;
-    private LocalTime startTime;
-    private LocalTime finishTime;
+    private String startTime;
+    private String finishTime;
     private ServiceType serviceType;
     private String clientEmail;
     private Integer clientId;

@@ -24,7 +24,6 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Objects;
 
 
@@ -46,9 +45,9 @@ public class Booking {
     @Column(name = "DATE")
     private LocalDate date;
     @Column(name = "START_TIME")
-    private LocalTime startTime;
+    private String startTime;
     @Column(name = "FINISH_TIME")
-    private LocalTime finishTime;
+    private String finishTime;
     @Column(name = "SERVICE_TYPE")
     private ServiceType serviceType;
     @Column(name = "USER_ID")
