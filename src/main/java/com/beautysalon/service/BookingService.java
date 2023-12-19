@@ -24,17 +24,18 @@ public class BookingService {
 
     public void save(final BookingRequest bookingRequest) {
         if (getBookingAvailability(bookingRequest)) {
-            final Client client = clientRepository.findByEmail(bookingRequest.getClientEmail());
-            final Booking booking =
-                    Booking.builder()
-                            .date(bookingRequest.getDate())
-                            .startTime(bookingRequest.getStartTime())
-                            .finishTime(bookingRequest.getFinishTime())
-                            .serviceType(bookingRequest.getServiceType())
-                            .clientEmail(bookingRequest.getClientEmail())
-                            .clientId(client.getId())
-                            .build();
             if (clientRepository.existsByEmail(bookingRequest.getClientEmail())) {
+                final Client client = clientRepository.findByEmail(bookingRequest.getClientEmail());
+                final Booking booking =
+                        Booking.builder()
+                                .date(bookingRequest.getDate())
+                                .startTime(bookingRequest.getStartTime())
+                                .finishTime(bookingRequest.getFinishTime())
+                                .serviceType(bookingRequest.getServiceType())
+                                .clientEmail(bookingRequest.getClientEmail())
+                                .clientId(client.getId())
+                                .build();
+
                 repository.save(booking);
             } else {
                 throw new RuntimeException("Booking can't be made without saving client first!");
@@ -97,13 +98,19 @@ public class BookingService {
             if (start.isAfter(alreadyBookedStartTime) && start.isBefore(alreadyBookedFinishTime)) {
                 return false;
             }
-
+            if (start.isBefore(alreadyBookedStartTime) && finish.isAfter(alreadyBookedFinishTime)) {
+                return false;
+            }
+            if (finish.isAfter(alreadyBookedStartTime) && finish.isBefore(alreadyBookedFinishTime)) {
+                return false;
+            }
             if (start.equals(alreadyBookedStartTime)) {
                 return false;
             }
             if (finish.isBefore(start)) {
                 return false;
             }
+
         }
         return true;
     }
