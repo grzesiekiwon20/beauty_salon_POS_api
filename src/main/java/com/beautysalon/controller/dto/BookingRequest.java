@@ -18,10 +18,11 @@ import java.time.LocalTime;
 public class BookingRequest {
 
     private LocalDate date;
-    private String startTime;
-    private String finishTime;
+    private LocalTime startTime;
+    private LocalTime finishTime;
     private ServiceType serviceType;
     private String clientEmail;
+    private String employeeName;
     private Integer clientId;
-
+    private Integer employeeId;
 }

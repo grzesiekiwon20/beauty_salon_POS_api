@@ -24,6 +24,7 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 
 
@@ -31,6 +32,7 @@ import java.util.Objects;
 @Setter
 @Builder
 @Entity
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "booking")
@@ -45,25 +47,18 @@ public class Booking {
     @Column(name = "DATE")
     private LocalDate date;
     @Column(name = "START_TIME")
-    private String startTime;
+    private LocalTime startTime;
     @Column(name = "FINISH_TIME")
-    private String finishTime;
+    private LocalTime finishTime;
     @Column(name = "SERVICE_TYPE")
     private ServiceType serviceType;
-    @Column(name = "USER_ID")
+    @Column(name = "EMPLOYEE_NAME")
+    private String employeeName;
+    @Column(name = "CLIENT_ID")
     private Integer clientId;
+    @Column(name = "EMPLOYEE_ID")
+    private Integer employeeId;
 
-
-    @Override
-    public String toString() {
-        return "Booking{" +
-                "clientEmail='" + clientEmail + '\'' +
-                ", date=" + date +
-                ", startTime=" + startTime +
-                ", finishTime=" + finishTime +
-                ", serviceType=" + serviceType +
-                '}';
-    }
 
     @Override
     public final boolean equals(Object o) {

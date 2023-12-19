@@ -4,19 +4,16 @@ import com.beautysalon.controller.dto.ClientRequest;
 import com.beautysalon.controller.dto.ClientResponse;
 import com.beautysalon.repository.ClientRepository;
 import com.beautysalon.repository.model.Client;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
 @Service
+@RequiredArgsConstructor
 public class ClientService {
 
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
-
-    public ClientService(ClientRepository clientRepository, ClientMapper clientMapper) {
-        this.clientRepository = clientRepository;
-        this.clientMapper = clientMapper;
-    }
 
     public void save(ClientRequest clientRequest) {
         if (clientRepository.existsByEmail(clientRequest.getEmail())) {

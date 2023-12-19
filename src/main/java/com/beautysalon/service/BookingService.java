@@ -4,14 +4,18 @@ import com.beautysalon.controller.dto.BookingRequest;
 import com.beautysalon.controller.dto.BookingResponse;
 import com.beautysalon.repository.BookingRepository;
 import com.beautysalon.repository.ClientRepository;
+import com.beautysalon.repository.EmployeeRepository;
 import com.beautysalon.repository.model.Booking;
 import com.beautysalon.repository.model.Client;
+import com.beautysalon.repository.model.Employee;
 import com.beautysalon.repository.model.ServiceType;
+import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 
 
@@ -21,11 +25,13 @@ public class BookingService {
 
     private final BookingRepository repository;
     private final ClientRepository clientRepository;
+    private final EmployeeRepository employeeRepository;
 
     public void save(final BookingRequest bookingRequest) {
         if (getBookingAvailability(bookingRequest)) {
             if (clientRepository.existsByEmail(bookingRequest.getClientEmail())) {
                 final Client client = clientRepository.findByEmail(bookingRequest.getClientEmail());
+                final Employee employee = employeeRepository.findByName(bookingRequest.getEmployeeName());
                 final Booking booking =
                         Booking.builder()
                                 .date(bookingRequest.getDate())
@@ -33,7 +39,9 @@ public class BookingService {
                                 .finishTime(bookingRequest.getFinishTime())
                                 .serviceType(bookingRequest.getServiceType())
                                 .clientEmail(bookingRequest.getClientEmail())
+                                .employeeName(bookingRequest.getEmployeeName())
                                 .clientId(client.getId())
+                                .employeeId(employee.getId())
                                 .build();
 
                 repository.save(booking);
@@ -75,7 +83,8 @@ public class BookingService {
     }
 
     public List<Booking> findByStartTime(String startTime) {
-        return repository.findResponseByStartTime(startTime);
+        final LocalTime start = LocalTime.parse(startTime);
+        return repository.findResponseByStartTime(start);
     }
 
     public List<Booking> findAll() {
@@ -83,34 +92,37 @@ public class BookingService {
     }
 
     public List<Booking> findByFinishTime(String finishTime) {
-        return repository.findResponseByFinishTime(finishTime);
+        final LocalTime finish = LocalTime.parse(finishTime);
+        return repository.findResponseByFinishTime(finish);
     }
 
     public boolean getBookingAvailability(BookingRequest request) {
-        List<Booking> bookings = repository.findByDate(request.getDate());
-        final LocalTime start = LocalTime.parse(request.getStartTime());
-        final LocalTime finish = LocalTime.parse(request.getFinishTime());
+        List<Booking> bookings = repository.findAll();
+        final LocalTime start = request.getStartTime();
+        final LocalTime finish = request.getFinishTime();
+        final LocalDate date  = request.getDate();
 
         for (Booking booking : bookings) {
-            final LocalTime alreadyBookedStartTime = LocalTime.parse(booking.getStartTime());
-            final LocalTime alreadyBookedFinishTime = LocalTime.parse(booking.getFinishTime());
+            if(booking.getDate().equals(date) && booking.getEmployeeName().equals(request.getEmployeeName())) {
+                final LocalTime alreadyBookedStartTime = booking.getStartTime();
+                final LocalTime alreadyBookedFinishTime = booking.getFinishTime();
 
-            if (start.isAfter(alreadyBookedStartTime) && start.isBefore(alreadyBookedFinishTime)) {
-                return false;
+                if (start.isAfter(alreadyBookedStartTime) && start.isBefore(alreadyBookedFinishTime)) {
+                    return false;
+                }
+                if (start.isBefore(alreadyBookedStartTime) && finish.isAfter(alreadyBookedFinishTime)) {
+                    return false;
+                }
+                if (finish.isAfter(alreadyBookedStartTime) && finish.isBefore(alreadyBookedFinishTime)) {
+                    return false;
+                }
+                if (start.equals(alreadyBookedStartTime)) {
+                    return false;
+                }
+                if (finish.isBefore(start)) {
+                    return false;
+                }
             }
-            if (start.isBefore(alreadyBookedStartTime) && finish.isAfter(alreadyBookedFinishTime)) {
-                return false;
-            }
-            if (finish.isAfter(alreadyBookedStartTime) && finish.isBefore(alreadyBookedFinishTime)) {
-                return false;
-            }
-            if (start.equals(alreadyBookedStartTime)) {
-                return false;
-            }
-            if (finish.isBefore(start)) {
-                return false;
-            }
-
         }
         return true;
     }

@@ -28,4 +28,18 @@ public class BookingServiceTest {
 
         verify(service, times(1)).save(bookingRequest);
     }
+    @Test
+    public void verifyIfBookingTimesAreAvailableWithIncorrectParams(){
+        BookingRequest bookingRequest = mock(BookingRequest.class);
+        when(service.getBookingAvailability(bookingRequest)).thenReturn(false);
+
+        service.save(bookingRequest);
+
+        verify(service, times(1)).save(bookingRequest);
+    }
+    @Test
+    public void verifyIfExceptionIsThrownIfNoBookingTimeIsAvailable(){
+
+    }
+
 }

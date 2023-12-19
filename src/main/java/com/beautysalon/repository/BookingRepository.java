@@ -59,7 +59,7 @@ public interface BookingRepository extends ListCrudRepository<Booking, Integer> 
      * @return Bookings with the given startTime
      */
     @Query("select b FROM Booking b where b.startTime = ?1")
-    List<Booking> findResponseByStartTime(String startTime);
+    List<Booking> findResponseByStartTime(LocalTime startTime);
 
     /**
      * Retrieve bookings by finishTime
@@ -67,5 +67,13 @@ public interface BookingRepository extends ListCrudRepository<Booking, Integer> 
      * @return Bookings with the given finishTime
      */
     @Query("select b FROM Booking b where b.finishTime = ?1")
-    List<Booking> findResponseByFinishTime(String finishTime);
+    List<Booking> findResponseByFinishTime(LocalTime finishTime);
+
+    /**
+     * Retrieve bookings by employeeName
+     * @param employeeName employeeName
+     * @return Bookings with the given employeeName
+     */
+    @Query("select b FROM Booking b where b.employeeName = ?1")
+    List<Booking> findByEmployeeName(String employeeName);
 }
