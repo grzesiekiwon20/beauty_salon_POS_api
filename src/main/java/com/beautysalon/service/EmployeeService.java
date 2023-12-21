@@ -7,6 +7,8 @@ import com.beautysalon.repository.model.Employee;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EmployeeService {
@@ -32,5 +34,13 @@ public class EmployeeService {
         }
         final Employee employee = repository.findByName(name);
         return mapper.map(employee);
+    }
+
+    public void deleteBookingById(Integer id) {
+        repository.deleteById(id);
+    }
+
+    public List<Employee> findAll() {
+        return repository.findAll();
     }
 }
