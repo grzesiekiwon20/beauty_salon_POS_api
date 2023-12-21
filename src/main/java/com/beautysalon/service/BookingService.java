@@ -9,13 +9,11 @@ import com.beautysalon.repository.model.Booking;
 import com.beautysalon.repository.model.Client;
 import com.beautysalon.repository.model.Employee;
 import com.beautysalon.repository.model.ServiceType;
-import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.List;
 
 
@@ -125,5 +123,9 @@ public class BookingService {
             }
         }
         return true;
+    }
+
+    public void deleteBookingById(Integer id) {
+        repository.deleteById(id);
     }
 }
