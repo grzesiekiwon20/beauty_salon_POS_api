@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 
 @RestController
@@ -83,5 +82,9 @@ public class BookingController {
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    @DeleteMapping("/api/booking/delete")
+    public void deleteById(Integer id){
+        service.deleteBookingById(id);
     }
 }
