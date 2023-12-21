@@ -51,4 +51,13 @@ public class ClientController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/api/user")
+    public ResponseEntity<?> findAll(){
+        try{
+            return new ResponseEntity<>(service.findAll(), HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
