@@ -7,6 +7,8 @@ import com.beautysalon.repository.model.Client;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -61,5 +63,9 @@ public class ClientService {
         // Add your email format validation logic here
         // For simplicity, this example checks for a basic format
         return email != null && email.matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$");
+    }
+
+    public List<Client> findAll() {
+        return clientRepository.findAll();
     }
 }
