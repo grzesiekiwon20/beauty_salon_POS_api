@@ -18,4 +18,5 @@ public class ClientResponse {
         private String name;
         private String email;
         private List<Integer> bookings;
+        private List<Integer> addressList;
 }
