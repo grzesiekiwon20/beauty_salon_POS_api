@@ -20,7 +20,6 @@ public class SecurityConfig{
                     auth.requestMatchers("/api/user/**").authenticated();
                     auth.requestMatchers("/api/booking/**").authenticated();
                     auth.requestMatchers("/api/employee/**").authenticated();
-                    auth.requestMatchers("/api/employee/create").authenticated();
                     auth.requestMatchers("/error").permitAll();
                     auth.anyRequest().permitAll();
                 })
