@@ -11,11 +11,12 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @Builder
 @Table(name = "CLIENTS")
 @AllArgsConstructor
-public class Client{
+public class Client {
 
     @Id
     @GeneratedValue
@@ -29,6 +30,11 @@ public class Client{
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "CLIENT_ID")
     private List<Booking> bookings;
+
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "CLIENT_ID")
+    private List<Address> addressList;
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
@@ -43,14 +49,5 @@ public class Client{
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "Client{" +
-                "name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", bookings=" + bookings +
-                '}';
     }
 }
