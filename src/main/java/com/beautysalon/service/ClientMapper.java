@@ -2,6 +2,7 @@ package com.beautysalon.service;
 
 import com.beautysalon.controller.dto.ClientRequest;
 import com.beautysalon.controller.dto.ClientResponse;
+import com.beautysalon.repository.model.Address;
 import com.beautysalon.repository.model.Booking;
 import com.beautysalon.repository.model.Client;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,12 @@ public class ClientMapper {
                                 .getBookings()
                                 .stream()
                                 .map(Booking::getId)
+                                .collect(Collectors.toList()))
+                .addressList(
+                        client
+                                .getAddressList()
+                                .stream()
+                                .map(Address::getId)
                                 .collect(Collectors.toList()))
                 .build();
     }
