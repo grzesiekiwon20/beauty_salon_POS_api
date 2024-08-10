@@ -1,6 +1,6 @@
 package com.beautysalon.repository;
 
-import com.beautysalon.repository.model.Booking;
+import com.beautysalon.repository.model.booking.Booking;
 import com.beautysalon.repository.model.ServiceType;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
