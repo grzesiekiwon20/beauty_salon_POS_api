@@ -1,4 +1,4 @@
-package com.beautysalon.repository.model.booking;
+package com.beautysalon.repository.model.activity;
 
 
 import com.beautysalon.repository.model.user.UserType;
