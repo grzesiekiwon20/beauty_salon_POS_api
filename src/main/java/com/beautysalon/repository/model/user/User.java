@@ -1,39 +1,30 @@
-package com.beautysalon.repository.model;
+package com.beautysalon.repository.model.user;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "users")
+@Builder
 @Getter
 @Setter
-@ToString
-@NoArgsConstructor
-@Builder
-@Table(name = "CLIENTS")
 @AllArgsConstructor
-public class Client {
+@NoArgsConstructor
+public class User {
 
     @Id
     @GeneratedValue
-    @Column(name = "CLIENT_ID")
-    private Integer id;
-    @Column(name = "NAME")
+    private Integer userId;
     private String name;
-    @Column(name = "EMAIL")
     private String email;
-
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "CLIENT_ID")
-    private List<Booking> bookings;
-
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "CLIENT_ID")
-    private List<Address> addressList;
+    private UserType userType;
 
     @Override
     public final boolean equals(Object o) {
@@ -42,8 +33,8 @@ public class Client {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Client client = (Client) o;
-        return getId() != null && Objects.equals(getId(), client.getId());
+        User user = (User) o;
+        return getUserId() != null && Objects.equals(getUserId(), user.getUserId());
     }
 
     @Override
