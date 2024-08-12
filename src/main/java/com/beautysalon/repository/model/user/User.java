@@ -1,12 +1,11 @@
 package com.beautysalon.repository.model.user;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.lang.NonNull;
 
 import java.util.Objects;
 
@@ -21,9 +20,17 @@ public class User {
 
     @Id
     @GeneratedValue
+    @Column(name = "USER_ID")
     private Integer userId;
+    @NonNull
+    @Column(name = "NAME")
     private String name;
+    @NonNull
+    @Email(regexp = "^(?=.{1,64}@.{1,255}$)(?=.{1,64}@)(?=.*[^.].*)(?=.*\\.).+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
+    @Column(name = "EMAIL")
     private String email;
+    @NonNull
+    @Column(name = "USER_TYPE")
     private UserType userType;
 
     @Override
