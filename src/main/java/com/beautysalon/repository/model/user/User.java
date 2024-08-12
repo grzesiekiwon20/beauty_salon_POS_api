@@ -11,7 +11,7 @@ import org.hibernate.proxy.HibernateProxy;
 import java.util.Objects;
 
 @Entity
-@Table(name = "users")
+@Table(name = "USERS")
 @Builder
 @Getter
 @Setter
