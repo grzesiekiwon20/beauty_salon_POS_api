@@ -17,7 +17,7 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "activity")
+@Table(name = "ACTIVITIES")
 public class Activity {
 
     @Id
