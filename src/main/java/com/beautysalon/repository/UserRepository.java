@@ -1,15 +1,13 @@
 package com.beautysalon.repository;
 
 
-import com.beautysalon.repository.model.Address;
+
 import com.beautysalon.repository.model.User;
 import com.beautysalon.repository.model.UserType;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 
