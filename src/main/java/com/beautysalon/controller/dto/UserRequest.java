@@ -1,13 +1,11 @@
 package com.beautysalon.controller.dto;
 
 
-import com.beautysalon.repository.model.Activity;
-import com.beautysalon.repository.model.Address;
+
 import com.beautysalon.repository.model.UserType;
 import lombok.*;
 
-import java.util.List;
-import java.util.Set;
+
 
 @Data
 @AllArgsConstructor
