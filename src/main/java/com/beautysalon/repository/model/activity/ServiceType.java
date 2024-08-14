@@ -1,4 +1,4 @@
-package com.beautysalon.repository.model;
+package com.beautysalon.repository.model.activity;
 
 public enum ServiceType {
     EYELASHES,

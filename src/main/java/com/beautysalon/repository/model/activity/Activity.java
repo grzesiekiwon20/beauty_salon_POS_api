@@ -1,24 +1,7 @@
-package com.beautysalon.repository.model;
+package com.beautysalon.repository.model.activity;
 
-/*
- * Booking Class
- * Represents a booking for beauty salon services.
- *
- * - @Entity: Marks the class as a JPA entity.
- * - @Table: Specifies the table name in the database.
- * - @ToString, @Getter, @Setter, @Builder: Lombok annotations for generating boilerplate code.
- * - @NoArgsConstructor, @AllArgsConstructor: Lombok annotations for generating constructors.
- * - @Id: Marks the id field as the primary key.
- * - @GeneratedValue: Specifies that the id should be generated automatically.
- * - @Column: Specifies the column names in the database.
- *
- * Custom equals and hashCode methods are implemented to properly compare Booking instances.
- * The constructor allows initializing date and service type when creating a booking.
- *
- * Usage example:
- * Booking booking = Booking.builder().date("2023-12-15").serviceType("Haircut").build();
- */
 
+import com.beautysalon.repository.model.user.UserType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
@@ -27,7 +10,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
-
 @Getter
 @Setter
 @Builder
@@ -35,15 +17,15 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "booking")
-public class Booking {
+@Table(name = "ACTIVITIES")
+public class Activity {
 
     @Id
     @GeneratedValue
-    @Column(name = "BOOKING_ID")
+    @Column(name = "ACTIVITY_ID")
     private Integer id;
-    @Column(name = "CLIENT_EMAIL")
-    private String clientEmail;
+    @Column(name = "USER_EMAIL")
+    private String userEmail;
     @Column(name = "DATE")
     private LocalDate date;
     @Column(name = "START_TIME")
@@ -52,12 +34,12 @@ public class Booking {
     private LocalTime finishTime;
     @Column(name = "SERVICE_TYPE")
     private ServiceType serviceType;
-    @Column(name = "EMPLOYEE_NAME")
-    private String employeeName;
-    @Column(name = "CLIENT_ID")
-    private Integer clientId;
-    @Column(name = "EMPLOYEE_ID")
-    private Integer employeeId;
+    @Column(name = "USER_TYPE")
+    private UserType userType;
+    @Column(name = "USER_ID")
+    private Integer userId;
+    @Column(name = "TASK_DONE")
+    private boolean taskDone;
 
 
     @Override
@@ -67,7 +49,7 @@ public class Booking {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Booking booking = (Booking) o;
+        Activity booking = (Activity) o;
         return getId() != null && Objects.equals(getId(), booking.getId());
     }
 
