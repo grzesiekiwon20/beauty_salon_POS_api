@@ -12,10 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 public class UserResponse {
 
-    private Integer userId;
+    private Long id;
     private String name;
     private String email;
     private UserType userType;
-    private List<Integer> activityList;
-    private List<Integer> addressList;
+    private List<Long> activityList;
+    private List<Long> addressList;
 }
