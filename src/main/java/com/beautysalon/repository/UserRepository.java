@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserRepository extends ListCrudRepository<User, Integer> {
+public interface UserRepository extends ListCrudRepository<User, Long> {
     boolean existsByEmail(String email);
 
     boolean existsByName(String name);
