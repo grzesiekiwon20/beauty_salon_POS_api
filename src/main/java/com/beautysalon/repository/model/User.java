@@ -42,7 +42,7 @@ public class User {
     @EqualsAndHashCode.Exclude
     protected List<Address> addresses;
 
-    public User(Long id, @NonNull String name, @NonNull String email, UserType userType, List<Activity> activities, List<Address> addresses) {
+    public User(Long id, @NonNull String name, @NonNull String email, @NonNull UserType userType, List<Activity> activities, List<Address> addresses) {
         this.id = id;
         this.name = name;
         this.email = email;
