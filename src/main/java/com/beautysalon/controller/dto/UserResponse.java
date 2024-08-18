@@ -1,21 +1,18 @@
 package com.beautysalon.controller.dto;
 
 import com.beautysalon.repository.model.UserType;
-import lombok.*;
+import lombok.Builder;
 
 import java.util.List;
 
-
 @Builder
-@NoArgsConstructor
-@Data
-@AllArgsConstructor
-public class UserResponse {
-
-    private Long id;
-    private String name;
-    private String email;
-    private UserType userType;
-    private List<Long> activityList;
-    private List<Long> addressList;
-}
+public record UserResponse(
+        Long id,
+        String firstName,
+        String lastName,
+        String email,
+        String phoneNumber ,
+        UserType userType,
+        List<Long> addresses,
+        List<Long> activities
+) { }

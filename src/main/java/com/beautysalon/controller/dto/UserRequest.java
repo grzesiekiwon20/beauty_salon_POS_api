@@ -1,18 +1,19 @@
 package com.beautysalon.controller.dto;
 
-
-
+import com.beautysalon.repository.model.Activity;
+import com.beautysalon.repository.model.Address;
 import com.beautysalon.repository.model.UserType;
-import lombok.*;
+import lombok.Builder;
 
+import java.util.List;
 
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class UserRequest {
-    private String name;
-    private String email;
-    private UserType userType;
-}
+public record UserRequest(
+        String firstName,
+        String lastName,
+        String email,
+        String phoneNumber,
+        List<Activity> activities,
+        List<Address> addresses,
+        UserType userType
+) { }
