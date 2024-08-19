@@ -3,8 +3,7 @@ package com.beautysalon.repository.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.proxy.HibernateProxy;
-
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -12,13 +11,11 @@ import java.util.Objects;
 @Builder
 @Getter
 @Setter
-@ToString
-@NoArgsConstructor
 @AllArgsConstructor
-@IdClass(AddressPk.class)
+@NoArgsConstructor
 public class Address {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ADDRESS_ID")
     private Long id;
 
@@ -34,27 +31,25 @@ public class Address {
     @Column(name = "ADDRESS_TYPE")
     private AddressType addressType;
 
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private User user;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "address_user",
+            joinColumns = @JoinColumn(name = "address_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users;
 
     @Override
-    public final boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Address address = (Address) o;
-        return getId() != null && Objects.equals(getId(), address.getId())
-                && getUser() != null && Objects.equals(getUser(), address.getUser());
+        return Objects.equals(id, address.id) && Objects.equals(street, address.street) && Objects.equals(city, address.city) && Objects.equals(postCode, address.postCode) && addressType == address.addressType && Objects.equals(users, address.users);
     }
 
     @Override
-    public final int hashCode() {
-        return Objects.hash(id, user);
+    public int hashCode() {
+        return Objects.hash(id, street, city, postCode, addressType, users);
     }
 }
