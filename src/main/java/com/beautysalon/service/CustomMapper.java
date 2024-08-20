@@ -12,9 +12,9 @@ public interface CustomMapper {
 
     //User mappers
     UserResponse map(User user);
-    User map(UserRequest request);
+    User map(UserRequest userRequest);
 
-    //Booking mappers
+    //Activity mappers
     ActivityResponse map(Activity activity);
     Activity map(ActivityRequest request);
 
