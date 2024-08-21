@@ -3,6 +3,7 @@ package com.beautysalon.controller.dto;
 import com.beautysalon.repository.model.Activity;
 import com.beautysalon.repository.model.Address;
 import com.beautysalon.repository.model.UserType;
+import com.beautysalon.repository.model.users.LoginDetails;
 import lombok.Builder;
 
 import java.util.List;
@@ -13,7 +14,8 @@ public record UserRequest(
         String lastName,
         String email,
         String phoneNumber,
+        LoginDetails loginDetails,
         List<Activity> activities,
         List<Address> addresses,
-        UserType userType
-) { }
+        UserType userType,
+        boolean enabled) { }

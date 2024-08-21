@@ -1,6 +1,7 @@
 package com.beautysalon.controller.dto;
 
 import com.beautysalon.repository.model.UserType;
+import com.beautysalon.repository.model.users.LoginDetails;
 import lombok.Builder;
 
 import java.util.List;
@@ -12,7 +13,8 @@ public record UserResponse(
         String lastName,
         String email,
         String phoneNumber ,
+        LoginDetails loginDetails,
         UserType userType,
         List<Long> addresses,
-        List<Long> activities
-) { }
+        List<Long> activities,
+        boolean enabled) { }
