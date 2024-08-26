@@ -1,13 +1,14 @@
 package com.beautysalon.service.impl;
 
 import com.beautysalon.controller.dto.*;
-import com.beautysalon.repository.model.Activity;
-import com.beautysalon.repository.model.Address;
-import com.beautysalon.repository.model.User;
+
+import com.beautysalon.repository.model.*;
+import com.beautysalon.repository.model.users.User;
 import com.beautysalon.service.CustomMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 
@@ -16,34 +17,38 @@ import java.util.stream.Collectors;
 public class CustomMapperImpl implements CustomMapper {
 
 
-    //User mapper implementation
+
+    //User mappers implementation
     @Override
-    public UserResponse map(final User user) {
-        return UserResponse
-                .builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .userType(user.getUserType())
-                .activityList(user.getActivities()
-                        .stream()
-                        .map(Activity::getId)
-                        .collect(Collectors.toList()))
-                .addressList(user.getAddresses()
-                        .stream()
-                        .map(Address::getId)
-                        .collect(Collectors.toList()))
-                .build();
-    }
-    @Override
-    public User map(final UserRequest request) {
+    public User map(UserRequest userRequest) {
         return User.builder()
-                .name(request.getName())
-                .email(request.getEmail())
-                .userType(request.getUserType())
+                .firstName(userRequest.firstName())
+                .lastName(userRequest.lastName())
+                .email(userRequest.email())
+                .phoneNumber(userRequest.phoneNumber())
+                .loginDetails(userRequest.loginDetails())
+                .userType(userRequest.userType())
+                .activities(new ArrayList<>())
+                .addresses(new ArrayList<>())
+                .enabled(userRequest.enabled())
                 .build();
     }
 
+    @Override
+    public UserResponse map(User user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .loginDetails(user.getLoginDetails())
+                .userType(user.getUserType())
+                .activities(user.getActivities().stream().map(Activity::getId).collect(Collectors.toList()))
+                .addresses(user.getAddresses().stream().map(Address::getId).collect(Collectors.toList()))
+                .enabled(user.isEnabled())
+                .build();
+    }
 
     //Activity mapper implementation
     @Override
@@ -54,22 +59,20 @@ public class CustomMapperImpl implements CustomMapper {
                 .startTime(activity.getStartTime())
                 .finishTime(activity.getFinishTime())
                 .serviceType(activity.getServiceType())
-                .userType(activity.getUserType())
                 .taskDone(activity.isTaskDone())
-                .user(activity.getUser())
+                .users(activity.getUsers().stream().map(User::getId).collect(Collectors.toList()))
                 .build();
     }
 
     @Override
     public Activity map(ActivityRequest request) {
         return Activity.builder()
-                .date(request.getDate())
-                .startTime(request.getStartTime())
-                .finishTime(request.getFinishTime())
-                .serviceType(request.getServiceType())
-                .userType(request.getUserType())
-                .taskDone(request.isTaskDone())
-                .user(request.getUser())
+                .date(request.date())
+                .startTime(request.startTime())
+                .finishTime(request.finishTime())
+                .serviceType(request.serviceType())
+                .taskDone(request.taskDone())
+                .users(new ArrayList<>())
                 .build();
     }
 
@@ -82,20 +85,19 @@ public class CustomMapperImpl implements CustomMapper {
                 .city(address.getCity())
                 .postCode(address.getPostCode())
                 .addressType(address.getAddressType())
-                .user(address.getUser())
+                .users(address.getUsers().stream().map(User::getId).collect(Collectors.toList()))
                 .build();
     }
 
     @Override
     public Address map(AddressRequest request) {
         return Address.builder()
-                .street(request.getStreet())
-                .city(request.getCity())
-                .postCode(request.getPostCode())
-                .addressType(request.getAddressType())
-                .user(request.getUser())
+                .street(request.street())
+                .city(request.city())
+                .postCode(request.postCode())
+                .addressType(request.addressType())
+                .users(new ArrayList<>())
                 .build();
     }
-
 
 }

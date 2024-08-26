@@ -4,6 +4,9 @@ package com.beautysalon.repository.model.users;
 import com.beautysalon.repository.model.Activity;
 import com.beautysalon.repository.model.Address;
 import com.beautysalon.repository.model.UserType;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.lang.NonNull;
@@ -16,7 +19,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
 public class User {
@@ -41,6 +43,8 @@ public class User {
     @Embedded
     private LoginDetails loginDetails;
 
+    @Getter
+    @Column(name = "enabled")
     private boolean enabled;
 
     @NonNull
@@ -56,6 +60,23 @@ public class User {
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private List<Address> addresses;
+
+    @JsonCreator
+    public User(@JsonProperty("id") Long id, @NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber, LoginDetails loginDetails, boolean enabled, @NonNull String email, @NonNull UserType userType, List<Activity> activities, List<Address> addresses) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.loginDetails = loginDetails;
+        this.enabled = enabled;
+        this.email = email;
+        this.userType = userType;
+        this.activities = activities;
+        this.addresses = addresses;
+    }
+
+    public User(Long id, String firstName, String lastName, String email, LoginDetails loginDetails, UserType userType, List<Activity> activities, List<Address> addresses, boolean enabled) {
+    }
 
     @Override
     public boolean equals(Object o) {

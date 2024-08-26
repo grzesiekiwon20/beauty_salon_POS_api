@@ -1,6 +1,7 @@
 package com.beautysalon.repository.model;
 
 
+import com.beautysalon.repository.model.users.User;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;

@@ -4,7 +4,7 @@ package com.beautysalon.service;
 import com.beautysalon.controller.dto.*;
 import com.beautysalon.repository.model.Activity;
 import com.beautysalon.repository.model.Address;
-import com.beautysalon.repository.model.User;
+import com.beautysalon.repository.model.users.User;
 import org.springframework.stereotype.Service;
 
 @Service

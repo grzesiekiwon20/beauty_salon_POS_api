@@ -12,14 +12,14 @@ import java.util.List;
 
 
 @Repository
-public interface ActivityRepository extends ListCrudRepository<Activity, Integer> {
+public interface ActivityRepository extends ListCrudRepository<Activity, Long> {
 
 
     List<Activity> findByServiceType(@NonNull ServiceType serviceType);
 
     List<Activity> findByDate(@NonNull LocalDate date);
 
-    List<Activity> findByUserEmail(@NonNull String userEmail);
+//    List<Activity> findByUserEmail(@NonNull String userEmail);
 
     List<Activity> findByStartTime(@NonNull LocalTime startTime);
 
