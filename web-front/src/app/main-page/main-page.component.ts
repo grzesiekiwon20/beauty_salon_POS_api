@@ -6,9 +6,6 @@ import {RouterLink, RouterModule, RouterOutlet} from "@angular/router";
   selector: 'app-main-page',
   standalone: true,
   imports: [
-    RouterOutlet,
-    RouterLink,
-    RouterModule
   ],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.css'
