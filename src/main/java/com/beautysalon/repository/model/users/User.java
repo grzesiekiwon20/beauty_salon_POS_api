@@ -5,7 +5,6 @@ import com.beautysalon.repository.model.Activity;
 import com.beautysalon.repository.model.Address;
 import com.beautysalon.repository.model.UserType;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -40,8 +39,9 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Embedded
-    private LoginDetails loginDetails;
+    @NonNull
+    @Column(name = "password")
+    private String password;
 
     @Getter
     @Column(name = "enabled")
@@ -62,12 +62,12 @@ public class User {
     private List<Address> addresses;
 
     @JsonCreator
-    public User(@JsonProperty("id") Long id, @NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber, LoginDetails loginDetails, boolean enabled, @NonNull String email, @NonNull UserType userType, List<Activity> activities, List<Address> addresses) {
+    public User(@JsonProperty("id") Long id, @NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber,@NonNull String password, boolean enabled, @NonNull String email, @NonNull UserType userType, List<Activity> activities, List<Address> addresses) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.loginDetails = loginDetails;
+        this.password = password;
         this.enabled = enabled;
         this.email = email;
         this.userType = userType;
@@ -75,20 +75,16 @@ public class User {
         this.addresses = addresses;
     }
 
-    public User(Long id, String firstName, String lastName, String email, LoginDetails loginDetails, UserType userType, List<Activity> activities, List<Address> addresses, boolean enabled) {
-    }
-
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(email, user.email) && userType == user.userType && Objects.equals(activities, user.activities) && Objects.equals(addresses, user.addresses);
+        return enabled == user.enabled && Objects.equals(id, user.id) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(password, user.password) && Objects.equals(email, user.email) && userType == user.userType && Objects.equals(activities, user.activities) && Objects.equals(addresses, user.addresses);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, phoneNumber, email, userType, activities, addresses);
+        return Objects.hash(id, firstName, lastName, phoneNumber, password, enabled, email, userType, activities, addresses);
     }
 }
