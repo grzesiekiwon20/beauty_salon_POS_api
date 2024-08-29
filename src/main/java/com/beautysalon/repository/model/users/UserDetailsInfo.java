@@ -6,15 +6,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 
-public class UserDetailsInfo implements UserDetails {
+public class UserDetailsInfo extends User implements UserDetails {
 
     private final String username;
     private final String password;
 
 
     public UserDetailsInfo(User user) {
-        this.username = user.getLoginDetails().getUsername();
-        this.password = user.getLoginDetails().getPassword();
+        this.username = super.getEmail();
+        this.password = super.getPassword();
     }
 
     @Override

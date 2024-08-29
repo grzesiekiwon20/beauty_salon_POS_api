@@ -37,25 +37,24 @@ public class GeneralServiceImpl implements GeneralService {
     @Override
     @Transactional
     public void saveUser(final UserRequest userRequest) {
-        if (isValidEmail(userRequest.email())) {
+        if(isValidEmail(userRequest.email())) {
             final User user = mapper.map(userRequest);
-            final String password = user.getLoginDetails().getPassword();
+            final String password = user.getPassword();
             final String encodedPassword = passwordEncoder.encode(password);
-            user.getLoginDetails().setPassword(encodedPassword);
+            user.setPassword(encodedPassword);
             user.setEnabled(true);
             userRepository.save(user);
-
-        } else {
-            throw new RuntimeException("Email not valid");
+        }else{
+            throw new RuntimeException("User with email "+ userRequest.email() + " already exist");
         }
 
     }
 
-    @Override
-    public UserResponse userResponseByUsername(String username) {
-        final User user = userRepository.findByLoginDetails_Username(username);
-        return mapper.map(user);
-    }
+//    @Override
+//    public UserResponse userResponseByUsername(String username) {
+//        final User user = userRepository.findByLoginDetails_Username(username);
+//        return mapper.map(user);
+//    }
 
     @Override
     @Transactional
@@ -278,12 +277,12 @@ public class GeneralServiceImpl implements GeneralService {
     }
 
 
-    private Long findIdByUsername(String username) {
-        final UserResponse userResponse = mapper.map(userRepository.findByLoginDetails_Username(username));
+    private Long findIdByUsername(String email) {
+        final UserResponse userResponse = mapper.map(userRepository.findByEmail(email));
         if(userResponse != null){
             return userResponse.id();
         }else {
-            throw new NullPointerException("No user found with username: " + username);
+            throw new NullPointerException("No user found with username: " + email);
         }
     }
 

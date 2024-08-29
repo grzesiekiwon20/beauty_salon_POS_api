@@ -1,6 +1,7 @@
 package com.beautysalon.controller.dto;
 
 import com.beautysalon.repository.model.UserType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.util.List;

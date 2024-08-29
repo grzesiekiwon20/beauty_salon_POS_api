@@ -27,7 +27,7 @@ public interface GeneralService {
 
     List<UserResponse> findListOfUserResponsesByUserType(UserType userType);
 
-    UserResponse userResponseByUsername(String username);
+//    UserResponse userResponseByUsername(String username);
 
 
 
