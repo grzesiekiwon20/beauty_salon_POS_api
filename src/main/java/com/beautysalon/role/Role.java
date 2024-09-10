@@ -2,11 +2,8 @@ package com.beautysalon.role;
 
 
 import com.beautysalon.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
-import org.springframework.lang.NonNull;
 
 import java.util.List;
 
