@@ -15,4 +15,5 @@ public interface UserRepository extends ListCrudRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE CONCAT(u.firstName, ' ', u.lastName) = :fullName")
     Optional<User> findByFullName(@Param("fullName") String fullName);
+
 }

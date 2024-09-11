@@ -1,11 +1,10 @@
 package com.beautysalon.user;
 
 
-import com.beautysalon.activity.Activity;
 import com.beautysalon.address.Address;
 import com.beautysalon.role.Role;
-import com.beautysalon.user.employee.Employee;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
@@ -43,8 +42,10 @@ public class User implements UserDetails, Principal {
     private String lastName;
 
     @NonNull
+    @Email
     @Column(unique = true)
     private String email;
+
     @NonNull
     private String password;
 
@@ -53,14 +54,12 @@ public class User implements UserDetails, Principal {
     private String phoneNumber;
 
     private boolean accountLocked;
-
-    @Column(name = "enabled")
     private boolean enabled;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Role> roles;
+    private List<Role> roleList;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Address> addresses;
 
     @CreatedDate
@@ -78,7 +77,7 @@ public class User implements UserDetails, Principal {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles
+        return this.roleList
                 .stream()
                 .map(role ->  new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
