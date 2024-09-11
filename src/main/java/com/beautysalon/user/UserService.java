@@ -33,35 +33,31 @@ public class UserService {
     public List<UserResponse> findAll() {
         List<User> users = userRepository.findAll();
 
-        return users.stream().map(user -> {
-            return UserResponse.builder()
-                    .firstName(user.getFirstName())
-                    .lastName(user.getLastName())
-                    .email(user.getEmail())
-                    .phoneNumber(user.getPhoneNumber())
-                    .roles(user.getRoleList().stream().map(Role::getId).collect(Collectors.toList()))
-                    .addresses(user.getAddresses().stream().map(Address::getId).collect(Collectors.toList()))
-                    .build();
-        }).toList();
+        return users.stream().map(user -> UserResponse.builder()
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .roles(user.getRoleList().stream().map(Role::getId).collect(Collectors.toList()))
+                .addresses(user.getAddresses().stream().map(Address::getId).collect(Collectors.toList()))
+                .build()).toList();
     }
 
     public List<UserResponse> findByAuthority(String role) {
         List<User> userList = userRepository.findAll();
         List<UserResponse> result = new ArrayList<>();
-        userList.forEach(user -> {
-            user.getRoleList().forEach(a-> {
-                    if(a.getName().equals(role)){
-                        result.add(
-                                UserResponse.builder()
-                                        .id(user.getId())
-                                        .firstName(user.getFirstName())
-                                        .lastName(user.getLastName())
-                                        .phoneNumber(user.getPhoneNumber())
-                                        .build()
-                        );
-                    }
-                    });
-        });
+        userList.forEach(user -> user.getRoleList().forEach(a-> {
+                if(a.getName().equals(role)){
+                    result.add(
+                            UserResponse.builder()
+                                    .id(user.getId())
+                                    .firstName(user.getFirstName())
+                                    .lastName(user.getLastName())
+                                    .phoneNumber(user.getPhoneNumber())
+                                    .build()
+                    );
+                }
+                }));
         return result;
     }
 

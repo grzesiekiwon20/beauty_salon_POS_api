@@ -1,10 +1,6 @@
 package com.beautysalon.user;
 
 
-import com.beautysalon.activity.Activity;
-import com.beautysalon.address.Address;
-import com.beautysalon.role.Role;
-import com.jayway.jsonpath.internal.function.sequence.First;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
