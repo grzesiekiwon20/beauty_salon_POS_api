@@ -40,4 +40,10 @@ public class UserController {
     ){
         return ResponseEntity.ok(service.findByUser(connectedUser));
     }
+    @GetMapping("/address-list")
+    public ResponseEntity<List<Long>> getAddressIdsListFromConnectedUser(
+            Authentication connectedUser
+    ){
+        return ResponseEntity.ok(service.findAddressIdsList(connectedUser));
+    }
 }

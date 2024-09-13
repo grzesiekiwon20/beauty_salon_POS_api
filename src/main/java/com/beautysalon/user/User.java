@@ -1,6 +1,7 @@
 package com.beautysalon.user;
 
 
+import com.beautysalon.activity.Activity;
 import com.beautysalon.address.Address;
 import com.beautysalon.role.Role;
 import jakarta.persistence.*;
@@ -61,6 +62,9 @@ public class User implements UserDetails, Principal {
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Address> addresses;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Activity> activities;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

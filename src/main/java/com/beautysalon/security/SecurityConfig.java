@@ -47,10 +47,10 @@ public class SecurityConfig {
                         req
                                 .requestMatchers(STRINGS).permitAll()
                                 .requestMatchers("/types/createType",
-                                        "/roles/**",
-                                        "/employee/**",
-                                        "/users/**"
+                                        "/roles/**"
                                 ).hasAuthority("ADMIN")
+                                .requestMatchers("/users/**",
+                                        "/address/**").hasAuthority("USER")
                                 .anyRequest().authenticated()
 
                 )

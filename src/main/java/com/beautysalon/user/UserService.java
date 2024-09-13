@@ -71,4 +71,10 @@ public class UserService {
                 .phoneNumber(savedUser.getPhoneNumber())
                 .build();
     }
+
+    public List<Long> findAddressIdsList(Authentication connectedUser) {
+        User user = (User) connectedUser.getPrincipal();
+        User existingUser = userRepository.findById(user.getId()).orElseThrow(()->new NullPointerException("No User Found"));
+        return existingUser.getAddresses().stream().map(Address::getId).toList();
+    }
 }
