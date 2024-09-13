@@ -1,6 +1,5 @@
 package com.beautysalon.user.token;
 
-import com.beautysalon.user.token.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
