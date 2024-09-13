@@ -22,9 +22,8 @@ public class Address extends BaseEntity {
     private String street;
     private String city;
     private String postCode;
-    private AddressType addressType;
+    private String addressType;
 
     @ManyToMany(mappedBy = "addresses")
-    private List<User> users;
-
+    private List<User> userList;
 }
