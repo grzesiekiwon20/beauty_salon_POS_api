@@ -2,6 +2,7 @@ package com.beautysalon.role;
 
 
 import com.beautysalon.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,5 +26,6 @@ public class Role {
     private String name;
 
     @ManyToMany(mappedBy = "roleList")
+    @JsonIgnore
     private List<User> userList;
 }

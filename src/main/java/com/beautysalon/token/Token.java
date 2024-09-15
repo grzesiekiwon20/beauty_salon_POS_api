@@ -1,4 +1,4 @@
-package com.beautysalon.user.token;
+package com.beautysalon.token;
 
 
 import com.beautysalon.user.User;
