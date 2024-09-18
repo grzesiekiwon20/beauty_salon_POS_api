@@ -2,10 +2,6 @@ package com.beautysalon.address;
 
 
 import com.beautysalon.common.BaseEntity;
-import com.beautysalon.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.v3.oas.annotations.media.SchemaProperty;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
