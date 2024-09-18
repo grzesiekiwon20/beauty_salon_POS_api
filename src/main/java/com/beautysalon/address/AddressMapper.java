@@ -18,18 +18,18 @@ public class AddressMapper {
                 .city(request.city())
                 .postCode(request.postCode())
                 .addressType(request.addressType())
-                .userList(new ArrayList<>())
+                .userId(request.userId())
                 .build();
     }
 
     public AddressResponse map(Address address){
         return AddressResponse.builder()
-                .addressId(address.getId())
+                .id(address.getId())
                 .street(address.getStreet())
                 .city(address.getCity())
                 .postCode(address.getPostCode())
                 .addressType(address.getAddressType())
-                .users(address.getUserList().stream().map(User::getId).collect(Collectors.toList()))
+                .userId(address.getUserId())
                 .build();
     }
 

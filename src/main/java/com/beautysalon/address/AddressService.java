@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,14 +25,7 @@ public class AddressService {
         Address newAddress = mapper.map(request);
         User user = (User) connectedUser.getPrincipal();
         User existingUser = userRepository.findById(user.getId()).orElseThrow(()-> new NullPointerException("No User Found"));
-        List<Address> addressList = existingUser.getAddresses();
-        addressList.forEach(savedAddress -> {
-            if (savedAddress.getAddressType().equals(newAddress.getAddressType())) {
-                throw new RuntimeException("You already have this type of address please choose different or update");
-            }
-        });
-        addressList.add(newAddress);
-        user.setAddresses(addressList);
+        newAddress.setUserId(existingUser.getId());
         return addressRepository.save(newAddress).getId();
     }
 
@@ -57,7 +51,6 @@ public class AddressService {
         existingAddress.setStreet(request.street());
         existingAddress.setCity(request.city());
         existingAddress.setPostCode(request.postCode());
-
         return addressRepository.save(existingAddress).getId();
     }
 
@@ -66,5 +59,18 @@ public class AddressService {
                 .findById(addressId)
                 .orElseThrow(()-> new NullPointerException("No Address Found"));
         return mapper.map(address);
+    }
+
+
+    public void removeById(Long addressId, Authentication connectedUser) {
+        User user = (User) connectedUser.getPrincipal();
+        User inRepositoryUser = verifyUser(user.getId());
+        List<Address> addresses = inRepositoryUser.getAddresses();
+        addresses.removeIf(address -> address.getId().equals(addressId));
+        addressRepository.deleteById(addressId);
+    }
+
+    private User verifyUser(Long id){
+        return userRepository.findById(id).orElseThrow(()-> new NullPointerException("No User Found"));
     }
 }

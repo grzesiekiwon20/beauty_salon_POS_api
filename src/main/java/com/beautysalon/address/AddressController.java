@@ -3,9 +3,8 @@ package com.beautysalon.address;
 
 import com.beautysalon.address.dto.AddressRequest;
 import com.beautysalon.address.dto.AddressResponse;
-import com.beautysalon.user.User;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.NonNull;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,7 @@ public class AddressController {
     private final AddressService service;
     @PostMapping("/create")
     public ResponseEntity<Long> createAddress(
-            @RequestBody AddressRequest request,
+            @Valid @RequestBody AddressRequest request,
             Authentication connectedUser
     ){
         return ResponseEntity.ok(service.saveAddress(request, connectedUser));
@@ -54,5 +53,12 @@ public class AddressController {
     ){
         return ResponseEntity.ok(service.findAddressResponseById(addressId));
     }
-
+    @DeleteMapping("/remove/{addressId}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void removeAddressById(
+            @PathVariable Long addressId,
+            Authentication connectedUser
+    ){
+        service.removeById(addressId, connectedUser);
+    }
 }
