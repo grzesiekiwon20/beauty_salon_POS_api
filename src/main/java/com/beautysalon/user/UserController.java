@@ -27,12 +27,12 @@ public class UserController {
     }
 
 
-    @GetMapping("/role")
-    public ResponseEntity<List<UserResponse>> getUserByAuthority(
-            @RequestParam String role
-    ){
-        return ResponseEntity.ok(service.findByAuthority(role));
-    }
+//    @GetMapping("/role")
+//    public ResponseEntity<List<UserResponse>> getUserByRole(
+//            @RequestParam String role
+//    ){
+//        return ResponseEntity.ok(service.findByRole(role));
+//    }
 
     @GetMapping("/account-details")
     public ResponseEntity<UserResponse> getDetailsOfConnectedUser(

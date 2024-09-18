@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class User implements UserDetails, Principal {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NonNull
@@ -60,10 +60,10 @@ public class User implements UserDetails, Principal {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roleList;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userId")
     private List<Address> addresses;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userId")
     private List<Activity> activities;
 
     @CreatedDate
@@ -73,6 +73,7 @@ public class User implements UserDetails, Principal {
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime lastModifiedDate;
+
 
     @Override
     public String getName() {
