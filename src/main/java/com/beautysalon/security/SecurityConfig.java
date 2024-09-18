@@ -50,7 +50,8 @@ public class SecurityConfig {
                                         "/roles/**"
                                 ).hasAuthority("ADMIN")
                                 .requestMatchers("/users/**",
-                                        "/address/**").hasAuthority("USER")
+                                        "/address/**",
+                                        "/api/v1/employees/**").hasAuthority("USER")
                                 .anyRequest().authenticated()
 
                 )
