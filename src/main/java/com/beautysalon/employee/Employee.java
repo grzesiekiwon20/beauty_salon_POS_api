@@ -3,7 +3,6 @@ package com.beautysalon.employee;
 
 import com.beautysalon.activity.Activity;
 import com.beautysalon.common.BaseEntity;
-import com.beautysalon.user.User;
 
 import jakarta.persistence.*;
 import lombok.*;

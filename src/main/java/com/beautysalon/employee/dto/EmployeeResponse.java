@@ -1,7 +1,5 @@
 package com.beautysalon.employee.dto;
 
-import com.beautysalon.user.User;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
