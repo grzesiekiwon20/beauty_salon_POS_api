@@ -31,10 +31,4 @@ public class Activity extends BaseEntity {
     private Long typeId;
 
 
-
-
-//    @OneToMany
-//    @JoinColumn(name = "activitiyhistory_id")
-//    private List<ActivityHistory> histories;
-
 }
