@@ -1,11 +1,6 @@
 package com.beautysalon.activity;
 
-import com.beautysalon.type.Type;
 import com.beautysalon.common.BaseEntity;
-import com.beautysalon.user.User;
-import com.beautysalon.employee.Employee;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
