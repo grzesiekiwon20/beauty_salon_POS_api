@@ -30,13 +30,14 @@ public class ActivityController {
         return ResponseEntity.ok(service.saveActivityWithConnectedUser(activityRequest, connectedUser, typeId,employeeId));
     }
 
-    @PostMapping("/create/emp")
+    @PostMapping("/create/emp/{typeId}/{userId}")
     public ResponseEntity<Long> saveActivityByEmployee(
             @Valid @RequestBody ActivityRequest activityRequest,
             Authentication connectedUser,
-            String clientName
+            @PathVariable Long typeId,
+            @PathVariable Long userId
     ){
-        return ResponseEntity.ok(service.saveActivityWithConnectedEmployee(activityRequest,connectedUser,clientName));
+        return ResponseEntity.ok(service.saveActivityWithConnectedEmployee(activityRequest,connectedUser,typeId,userId));
     }
 
     @GetMapping("/all")
@@ -44,7 +45,7 @@ public class ActivityController {
         return ResponseEntity.ok(service.findAllActivities());
     }
 
-    @GetMapping("/userId")
+    @GetMapping("/connectedUser")
     public ResponseEntity<List<ActivityResponse>> getActivitiesByConnectedUserId(
             Authentication connectedUser
     ){
@@ -52,10 +53,10 @@ public class ActivityController {
     }
 
     @GetMapping("/{activityId}")
-    public ResponseEntity<ActivityResponse> getActivitiesByUserId(
+    public ResponseEntity<ActivityResponse> getActivityById(
             @PathVariable Long activityId
     ){
-        return ResponseEntity.ok(service.findActivityById(activityId));
+        return ResponseEntity.ok(service.findById(activityId));
     }
 
 }
