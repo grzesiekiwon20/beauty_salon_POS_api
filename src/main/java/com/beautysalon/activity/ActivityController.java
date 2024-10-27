@@ -30,16 +30,6 @@ public class ActivityController {
         return ResponseEntity.ok(service.saveActivityWithConnectedUser(activityRequest, connectedUser, typeId, employeeId));
     }
 
-//    @PostMapping("/create/emp/{typeId}/{userId}")
-//    public ResponseEntity<Long> saveActivityByEmployee(
-//            @Valid @RequestBody ActivityRequest activityRequest,
-//            Authentication connectedUser,
-//            @PathVariable Long typeId,
-//            @PathVariable Long userId
-//    ){
-//        return ResponseEntity.ok(service.saveActivityWithConnectedEmployee(activityRequest,connectedUser,typeId,userId));
-//    }
-
     @GetMapping("/all")
     public ResponseEntity<List<ActivityResponse>> getAllActivities() {
         return ResponseEntity.ok(service.findAllActivities());

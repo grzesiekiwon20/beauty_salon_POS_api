@@ -3,12 +3,8 @@ package com.beautysalon.activity;
 
 import com.beautysalon.activity.dto.ActivityRequest;
 import com.beautysalon.activity.dto.ActivityResponse;
-import com.beautysalon.type.Type;
-import com.beautysalon.type.TypeRepository;
 import com.beautysalon.employee.Employee;
 import com.beautysalon.employee.EmployeeRepository;
-import com.beautysalon.user.User;
-import com.beautysalon.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -23,9 +19,7 @@ public class ActivityService {
 
     private final ActivityRepository activityRepository;
     private final EmployeeRepository employeeRepository;
-    private final TypeRepository typeRepository;
     private final ActivityMapper mapper;
-    private final UserService userService;
 
     public Long saveActivityWithConnectedUser(
             ActivityRequest activityRequest,
@@ -45,22 +39,7 @@ public class ActivityService {
         return activityRepository.save(activity).getId();
     }
 
-//
-//    public Long saveActivityWithConnectedEmployee(
-//            ActivityRequest activityRequest,
-//            Authentication connectedUser,
-//            String clientName
-//    ) {
-//
-//        Activity activity = mapper.map(activityRequest);
-//        List<User> users = userService.getUserList();
-//        for(User user : users){
-//            if(user.getPhoneNumber())
-//        }
-//        activity.setClient(client);
-//
-//        return activityRepository.save(activity).getId();
-//    }
+
 
     public List<ActivityResponse> findAllActivities() {
         return activityRepository

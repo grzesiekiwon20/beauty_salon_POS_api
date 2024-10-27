@@ -17,7 +17,7 @@ public class ActivityMapper {
                 .taskDone(request.taskDone())
                 .deposit(request.deposit())
                 .depositPaid(request.depositPaid())
-//                .employeeId(request.employeeId())
+                .employeeId(request.employeeId())
                 .userId(request.userId())
                 .typeId(request.typeId())
                 .build();
@@ -32,7 +32,7 @@ public class ActivityMapper {
                 .taskDone(activity.isTaskDone())
                 .deposit(activity.getDeposit())
                 .depositPaid(activity.isDepositPaid())
-//                .employeeId(activity.getEmployeeId())
+                .employeeId(activity.getEmployeeId())
                 .userId(activity.getUserId())
                 .typeId(activity.getTypeId())
                 .build();
