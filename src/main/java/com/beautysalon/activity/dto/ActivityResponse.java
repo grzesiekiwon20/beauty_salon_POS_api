@@ -21,6 +21,6 @@ public class ActivityResponse {
     private double deposit;
     private boolean depositPaid;
     private Long employeeId;
-    private Long userId;
+    private String userId;
     private Long typeId;
 }

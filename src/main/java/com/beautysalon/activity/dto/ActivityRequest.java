@@ -16,4 +16,4 @@ public record ActivityRequest(
         boolean depositPaid,
         Long employeeId,
         Long typeId,
-        Long userId) {}
+        String userId) {}

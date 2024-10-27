@@ -27,7 +27,7 @@ public class Activity extends BaseEntity {
     private boolean depositPaid;
 
     private Long employeeId;
-    private Long userId;
+    private String userId;
     private Long typeId;
 
 
