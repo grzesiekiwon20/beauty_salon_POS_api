@@ -25,11 +25,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class OrderItem extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
     private Order order;
 
     private Integer quantity;
