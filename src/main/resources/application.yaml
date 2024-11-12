@@ -1,0 +1,45 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${ISSUER_URI}
+  datasource:
+    keycloak:
+      name: ${KEYCLOAK_DB_NAME}
+      username: ${KEYCLOAK_DB_USERNAME}
+      password: ${KEYCLOAK_DB_PASSWORD}
+      url: ${KEYCLOAK_DB_URL}
+      driver-class-name: org.postgresql.Driver
+    postgres:
+      name: ${POSTGRES_DB_NAME}
+      username: ${POSTGRES_DB_USERNAME}
+      password: ${POSTGRES_DB_PASSWORD}
+      url: ${POSTGRES_DB_URL}
+      driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+#    properties:
+#      jakarta:
+#        persistence:
+#          schema-generation:
+#            scripts:
+#              action: create
+#              create-target: create.sql
+#            create-source: metadata
+  keycloak:
+    client-id: ${CLIENT_ID}
+    client-secret: ${CLIENT_SECRET}
+    realm: ${REALM}
+    server-url: ${SERVER_URL}
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api/
+
+application:
+  file:
+    uploads:
+      photos-output-path: ./uploads

@@ -16,7 +16,7 @@ import java.util.List;
 @Tag(name = "Type", description = "The Type Api")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("types")
+@RequestMapping("/types")
 public class TypeController {
 
     private final TypeService typeService;

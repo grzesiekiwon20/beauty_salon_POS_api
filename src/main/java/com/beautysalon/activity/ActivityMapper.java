@@ -17,9 +17,6 @@ public class ActivityMapper {
                 .taskDone(request.taskDone())
                 .deposit(request.deposit())
                 .depositPaid(request.depositPaid())
-                .employeeId(request.employeeId())
-                .userId(request.userId())
-                .typeId(request.typeId())
                 .build();
     }
     public ActivityResponse map(Activity activity) {
@@ -32,9 +29,9 @@ public class ActivityMapper {
                 .taskDone(activity.isTaskDone())
                 .deposit(activity.getDeposit())
                 .depositPaid(activity.isDepositPaid())
-                .employeeId(activity.getEmployeeId())
-                .userId(activity.getUserId())
-                .typeId(activity.getTypeId())
+                .employee(activity.getEmployee())
+                .customer(activity.getCustomer())
+                .type(activity.getType())
                 .build();
     }
 }

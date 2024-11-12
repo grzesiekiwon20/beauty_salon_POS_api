@@ -1,5 +1,6 @@
 package com.beautysalon.employee;
 
+import com.beautysalon.activity.Activity;
 import com.beautysalon.common.BaseEntity;
 import com.beautysalon.employee.dto.EmployeeResponse;
 import com.beautysalon.employee.dto.EmployeeRequest;
@@ -20,7 +21,6 @@ public class EmployeeMapper {
     }
     public Employee map(EmployeeRequest employeeRequest){
         return Employee.builder()
-                .id(employeeRequest.employeeId())
                 .userId(employeeRequest.userId())
                 .activities(new ArrayList<>())
                 .build();

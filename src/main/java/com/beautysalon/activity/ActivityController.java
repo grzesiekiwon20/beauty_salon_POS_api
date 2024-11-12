@@ -14,11 +14,15 @@ import java.util.List;
 
 @RestController
 @Tag(name = "Activity", description = "The Activity Api")
-@RequiredArgsConstructor
 @RequestMapping("activities")
 public class ActivityController {
 
     private final ActivityService service;
+
+    public ActivityController(ActivityService service) {
+        this.service = service;
+    }
+
 
     @PostMapping("/create/usr/{typeId}/{employeeId}")
     public ResponseEntity<Long> saveActivityByUser(

@@ -1,49 +1,31 @@
 package com.beautysalon.user;
 
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
+@RestController()
 @RequiredArgsConstructor
-@RequestMapping("users")
+@RequestMapping("/users")
 public class UserController {
 
-    private final UserService service;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserDetails(
-            @Valid @PathVariable Long id
-    ) {
-        return ResponseEntity.ok(service.findById(id));
-    }
+    private final UserService userService;
+
+
     @GetMapping("/all")
-    public ResponseEntity<List<UserResponse>> getAllUsers(){
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<List<User>> getAllUsers(){
+        return ResponseEntity.ok(userService.getUserList());
     }
 
-
-//    @GetMapping("/role")
-//    public ResponseEntity<List<UserResponse>> getUserByRole(
-//            @RequestParam String role
-//    ){
-//        return ResponseEntity.ok(service.findByRole(role));
+//    @GetMapping("http://localhost:9090/realms/salon-app/protocol/openid-connect/userinfo")
+//    public ResponseEntity<?> getUserInfo(){
+//        return new ResponseEntity<>()
 //    }
 
-    @GetMapping("/account-details")
-    public ResponseEntity<UserResponse> getDetailsOfConnectedUser(
-            Authentication connectedUser
-    ){
-        return ResponseEntity.ok(service.findByUser(connectedUser));
-    }
-    @GetMapping("/address-list")
-    public ResponseEntity<List<Long>> getAddressIdsListFromConnectedUser(
-            Authentication connectedUser
-    ){
-        return ResponseEntity.ok(service.findAddressIdsList(connectedUser));
-    }
 }

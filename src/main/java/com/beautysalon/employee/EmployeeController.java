@@ -17,9 +17,9 @@ public class EmployeeController {
 
     @PostMapping("/createEmployee")
     public ResponseEntity<Long> createEmployee(
-            @RequestParam String email
+            @RequestParam String id
     ){
-        return ResponseEntity.ok(service.saveEmployee(email));
+        return ResponseEntity.ok(service.saveEmployee(id));
     }
 
     @GetMapping("/all")

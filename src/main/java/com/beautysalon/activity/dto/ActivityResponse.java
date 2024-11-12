@@ -1,6 +1,9 @@
 package com.beautysalon.activity.dto;
 
 
+import com.beautysalon.customer.Customer;
+import com.beautysalon.employee.Employee;
+import com.beautysalon.type.Type;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -20,7 +23,7 @@ public class ActivityResponse {
     private boolean taskDone;
     private double deposit;
     private boolean depositPaid;
-    private Long employeeId;
-    private String userId;
-    private Long typeId;
+    private Employee employee;
+    private Customer customer;
+    private Type type;
 }

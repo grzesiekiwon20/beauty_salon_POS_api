@@ -16,7 +16,7 @@ import java.util.List;
 
 @Tag(name = "Address", description = "The Address Api")
 @RestController
-@RequestMapping("address")
+@RequestMapping("addresses")
 @RequiredArgsConstructor
 public class AddressController {
 
@@ -60,5 +60,20 @@ public class AddressController {
             Authentication connectedUser
     ){
         service.removeById(addressId, connectedUser);
+    }
+    @GetMapping("/currentList")
+    public ResponseEntity<List<AddressResponse>> getCurrentAddressesList(
+            Authentication connectedUser,
+           @RequestParam boolean current
+    ){
+        return ResponseEntity.ok(service.findCurrentAddressesList(current, connectedUser));
+    }
+
+    @PutMapping("update/current/{id}")
+    public ResponseEntity<Long> setExpiredOrCurrent(
+            @PathVariable Long id,
+            @RequestParam boolean current
+    ) {
+        return ResponseEntity.ok(service.setAddressAsExpiredOrCurrent(id, current));
     }
 }

@@ -1,6 +1,9 @@
 package com.beautysalon.activity;
 
 import com.beautysalon.common.BaseEntity;
+import com.beautysalon.customer.Customer;
+import com.beautysalon.employee.Employee;
+import com.beautysalon.type.Type;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -26,9 +29,11 @@ public class Activity extends BaseEntity {
     private double deposit;
     private boolean depositPaid;
 
-    private Long employeeId;
-    private String userId;
-    private Long typeId;
-
+    @ManyToOne
+    private Employee employee;
+    @ManyToOne
+    private Customer customer;
+    @ManyToOne
+    private Type type;
 
 }

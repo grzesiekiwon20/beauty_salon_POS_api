@@ -13,7 +13,5 @@ public record ActivityRequest(
         String remarks,
         boolean taskDone,
         double deposit,
-        boolean depositPaid,
-        Long employeeId,
-        Long typeId,
-        String userId) {}
+        boolean depositPaid
+) {}

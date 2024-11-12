@@ -21,14 +21,17 @@ public class Address extends BaseEntity{
 
 
     @NonNull
-    private String street;
+    private String firstLineAddress;
+
+    private String secondLineAddress;
     @NonNull
     private String city;
     @NonNull
     private String postCode;
     @NonNull
-    private String addressType;
+    private AddressType addressType;
+    private Boolean current;
 
-    private Long userId;
+    private String userId;
 
 }

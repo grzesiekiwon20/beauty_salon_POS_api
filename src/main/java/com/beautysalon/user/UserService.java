@@ -1,55 +1,35 @@
 package com.beautysalon.user;
 
 
-import com.beautysalon.activity.Activity;
-import com.beautysalon.address.Address;
-import com.beautysalon.common.BaseEntity;
-import com.beautysalon.role.Role;
+import com.beautysalon.config.KeycloakAdminService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final UserMapper mapper;
 
-    public UserResponse findById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new NullPointerException("No User Found"));
-        return mapper.map(user);
-    }
+    private final KeycloakAdminService keycloakAdminService;
 
-    public List<UserResponse> findAll() {
-        List<User> users = userRepository.findAll();
-        return users.stream().map(mapper::map).collect(Collectors.toList());
-    }
+    public List<User> getUserList(){
+        List<User> userList = new ArrayList<>();
+        String users = keycloakAdminService.getUsers();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-//    public List<UserResponse> findByRole(String role) {
-//        List<User> userList = userRepository.findAll();
-//        List<UserResponse> result = new ArrayList<>();
-////        userList.forEach(user -> user.getRoleList().forEach(a-> {
-////                if(a.getName().equals(role)){
-////                    result.add(mapper.map(user));
-////                }
-////                }));
-//        return result;
-//    }
-
-    public UserResponse findByUser(Authentication connectedUser) {
-        User user = (User) connectedUser.getPrincipal();
-        User savedUser = userRepository.findById(user.getId()).orElseThrow(()->new NullPointerException("No User Found"));
-        return mapper.map(savedUser);
-    }
-
-    public List<Long> findAddressIdsList(Authentication connectedUser) {
-        User user = (User) connectedUser.getPrincipal();
-        User existingUser = userRepository.findById(user.getId()).orElseThrow(()->new NullPointerException("No User Found"));
-        return existingUser.getAddresses().stream().map(Address::getId).toList();
+        try {
+            userList = objectMapper.readValue(users, new TypeReference<List<User>>() {});
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return userList;
     }
 }

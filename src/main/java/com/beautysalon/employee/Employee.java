@@ -21,10 +21,9 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Employee extends BaseEntity{
 
+    private String userId;
 
-    private Long userId;
-
-    @OneToMany(mappedBy = "employeeId")
+    @OneToMany(mappedBy = "employee", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Activity> activities;
 
 }

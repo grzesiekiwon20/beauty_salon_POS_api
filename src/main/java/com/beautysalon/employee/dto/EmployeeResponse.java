@@ -13,6 +13,6 @@ import java.util.List;
 @Builder
 public class EmployeeResponse {
     private Long id;
-    private Long userId;
+    private String userId;
     private List<Long> activities;
 }
