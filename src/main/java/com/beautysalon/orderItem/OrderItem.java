@@ -6,7 +6,6 @@ import com.beautysalon.order.Order;
 import com.beautysalon.product.Product;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
