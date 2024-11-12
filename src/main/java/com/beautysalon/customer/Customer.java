@@ -6,6 +6,7 @@ import com.beautysalon.cart.Cart;
 import com.beautysalon.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
@@ -13,14 +14,11 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-@Builder
+@SuperBuilder
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Customer {
+public class Customer extends BaseEntity{
 
-    @Id
-    @GeneratedValue
-    private Long id;
     private String userId;
 
     @OneToOne(mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.MERGE},orphanRemoval = true)
