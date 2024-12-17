@@ -1,10 +1,14 @@
 package com.beautysalon.config;
 
-import lombok.RequiredArgsConstructor;
+
+import io.swagger.v3.oas.models.PathItem;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -12,14 +16,16 @@ import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 
 
 @Configuration
-@RequiredArgsConstructor
 public class BeansConfig {
 
+
+
     @Bean
-    public AuditorAware<String> auditorAware(){
+    public AuditorAware<String> auditorAware() {
         return new ApplicationAuditAware();
     }
 
@@ -45,10 +51,6 @@ public class BeansConfig {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
 
-    }
-    @Bean
-    public RestClient restClient(){
-        return RestClient.builder().build();
     }
 }
 

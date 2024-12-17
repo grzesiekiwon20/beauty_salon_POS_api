@@ -1,17 +1,23 @@
 package com.beautysalon.activity.dto;
 
 
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 
 public record ActivityRequest(
-        Long id,
+        @NotNull
         LocalDate date,
+        @NotNull
         LocalTime startTime,
-        LocalTime finishTime,
         String remarks,
         boolean taskDone,
         double deposit,
-        boolean depositPaid
+        boolean depositPaid,
+        @NotNull
+        Long employeeId,
+        @NotNull
+        Long serviceId
 ) {}

@@ -25,64 +25,55 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(LockedException.class)
     public ResponseEntity<ExceptionResponse> handleException(LockedException exp) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setBusinessErrorCode(ACCOUNT_LOCKED.getCode());
+        exceptionResponse.setBusinessErrorDescription(ACCOUNT_LOCKED.getDescription());
+        exceptionResponse.setError(exp.getMessage());
         return ResponseEntity
                 .status(UNAUTHORIZED)
-                .body(
-                        ExceptionResponse.builder()
-                                .businessErrorCode(ACCOUNT_LOCKED.getCode())
-                                .businessErrorDescription(ACCOUNT_LOCKED.getDescription())
-                                .error(exp.getMessage())
-                                .build()
-                );
+                .body(exceptionResponse);
     }
 
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<ExceptionResponse> handleException(DisabledException exp) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setBusinessErrorCode(ACCOUNT_DISABLED.getCode());
+        exceptionResponse.setBusinessErrorDescription(ACCOUNT_DISABLED.getDescription());
+        exceptionResponse.setError(exp.getMessage());
         return ResponseEntity
                 .status(UNAUTHORIZED)
-                .body(
-                        ExceptionResponse.builder()
-                                .businessErrorCode(ACCOUNT_DISABLED.getCode())
-                                .businessErrorDescription(ACCOUNT_DISABLED.getDescription())
-                                .error(exp.getMessage())
-                                .build()
-                );
+                .body(exceptionResponse);
     }
 
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ExceptionResponse> handleException() {
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setBusinessErrorCode(BAD_CREDENTIALS.getCode());
+        exceptionResponse.setBusinessErrorDescription(BAD_CREDENTIALS.getDescription());
+        exceptionResponse.setError("Login and / or Password is incorrect");
         return ResponseEntity
                 .status(UNAUTHORIZED)
-                .body(
-                        ExceptionResponse.builder()
-                                .businessErrorCode(BAD_CREDENTIALS.getCode())
-                                .businessErrorDescription(BAD_CREDENTIALS.getDescription())
-                                .error("Login and / or Password is incorrect")
-                                .build()
-                );
+                .body(exceptionResponse);
     }
 
     @ExceptionHandler(ActivationTokenException.class)
     public ResponseEntity<ExceptionResponse> handleException(ActivationTokenException exp) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setError(exp.getMessage());
+
         return ResponseEntity
                 .status(BAD_REQUEST)
-                .body(
-                        ExceptionResponse.builder()
-                                .error(exp.getMessage())
-                                .build()
-                );
+                .body(exceptionResponse);
     }
 
     @ExceptionHandler(OperationNotPermittedException.class)
     public ResponseEntity<ExceptionResponse> handleException(OperationNotPermittedException exp) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setError(exp.getMessage());
         return ResponseEntity
                 .status(BAD_REQUEST)
-                .body(
-                        ExceptionResponse.builder()
-                                .error(exp.getMessage())
-                                .build()
-                );
+                .body(exceptionResponse);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -94,26 +85,22 @@ public class GlobalExceptionHandler {
                     var errorMessage = error.getDefaultMessage();
                     errors.add(errorMessage);
                 });
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setValidationErrors(errors);
 
         return ResponseEntity
                 .status(BAD_REQUEST)
-                .body(
-                        ExceptionResponse.builder()
-                                .validationErrors(errors)
-                                .build()
-                );
+                .body(exceptionResponse);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception exp) {
         exp.printStackTrace();
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setBusinessErrorDescription("Internal error, please contact the admin");
+        exceptionResponse.setError(exp.getMessage());
         return ResponseEntity
                 .status(INTERNAL_SERVER_ERROR)
-                .body(
-                        ExceptionResponse.builder()
-                                .businessErrorDescription("Internal error, please contact the admin")
-                                .error(exp.getMessage())
-                                .build()
-                );
+                .body(exceptionResponse);
     }
 }

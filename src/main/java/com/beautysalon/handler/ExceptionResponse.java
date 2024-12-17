@@ -1,20 +1,12 @@
 package com.beautysalon.handler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 import java.util.Map;
 import java.util.Set;
 
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ExceptionResponse {
 
@@ -23,4 +15,55 @@ public class ExceptionResponse {
     private String error;
     private Set<String> validationErrors;
     private Map<String, String> errors;
+
+    public ExceptionResponse(Integer businessErrorCode, String businessErrorDescription, String error, Set<String> validationErrors, Map<String, String> errors) {
+        this.businessErrorCode = businessErrorCode;
+        this.businessErrorDescription = businessErrorDescription;
+        this.error = error;
+        this.validationErrors = validationErrors;
+        this.errors = errors;
+    }
+
+    public ExceptionResponse() {
+    }
+
+    public Integer getBusinessErrorCode() {
+        return businessErrorCode;
+    }
+
+    public void setBusinessErrorCode(Integer businessErrorCode) {
+        this.businessErrorCode = businessErrorCode;
+    }
+
+    public String getBusinessErrorDescription() {
+        return businessErrorDescription;
+    }
+
+    public void setBusinessErrorDescription(String businessErrorDescription) {
+        this.businessErrorDescription = businessErrorDescription;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public Set<String> getValidationErrors() {
+        return validationErrors;
+    }
+
+    public void setValidationErrors(Set<String> validationErrors) {
+        this.validationErrors = validationErrors;
+    }
+
+    public Map<String, String> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(Map<String, String> errors) {
+        this.errors = errors;
+    }
 }

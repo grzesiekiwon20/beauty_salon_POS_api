@@ -1,9 +1,7 @@
 package com.beautysalon.product;
 
 
-import com.beautysalon.product.dto.ProductResponse;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import com.beautysalon.category.SubCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    boolean existsByName(@NotBlank @Size(min = 3, message = "Product name must contain at least 3 characters") String name);
 
 
     @Query(
@@ -22,4 +19,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                     """
     )
     List<Product> findProductByCategoryId(@Param("categoryId") Long categoryId);
+
+
 }

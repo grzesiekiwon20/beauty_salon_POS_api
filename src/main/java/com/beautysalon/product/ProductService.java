@@ -3,13 +3,12 @@ package com.beautysalon.product;
 
 import com.beautysalon.category.Category;
 import com.beautysalon.category.CategoryRepository;
+import com.beautysalon.category.SubCategory;
 import com.beautysalon.common.PageResponse;
 import com.beautysalon.file.FileStorageService;
 import com.beautysalon.product.dto.ProductRequest;
 import com.beautysalon.product.dto.ProductResponse;
-import com.beautysalon.type.Type;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,13 +16,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 @Service
-@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -31,16 +27,19 @@ public class ProductService {
     private final FileStorageService fileStorageService;
     private final CategoryRepository categoryRepository;
 
-    public Long saveProduct(ProductRequest productRequest, Long categoryId) {
-        Product product = mapper.mapProduct(productRequest);
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new NullPointerException("No category found with Id: " + categoryId));
+    public ProductService(ProductRepository productRepository, ProductMapper mapper, FileStorageService fileStorageService, CategoryRepository categoryRepository) {
+        this.productRepository = productRepository;
+        this.mapper = mapper;
+        this.fileStorageService = fileStorageService;
+        this.categoryRepository = categoryRepository;
+    }
 
-        if (!productRepository.existsByName(product.getName())) {
-            product.setCategory(category);
-            return productRepository.save(product).getId();
-        } else {
-            throw new RuntimeException("Product with name: " + productRequest.name() + "already exist");
-        }
+    public Long saveProduct(ProductRequest productRequest, Long categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(()-> new NullPointerException("No category found"));
+        Product product = mapper
+                .mapProduct(productRequest);
+        product.setCategory(category);
+        return productRepository.save(product).getId();
     }
 
     public ProductResponse findProductResponseById(Long productId) {
@@ -51,7 +50,7 @@ public class ProductService {
 
     }
 
-    public void uploadTypeCoverPicture(MultipartFile file, Long productId) {
+    public void uploadProductCoverPicture(MultipartFile file, Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("No product found with ID:: " + productId));
         var profilePicture = fileStorageService.saveFile(file, productId);
@@ -65,7 +64,7 @@ public class ProductService {
         return productList.stream().map(mapper::mapProductResponse).toList();
     }
 
-    public PageResponse<ProductResponse> findAllProducts(int page, int size) {
+    public PageResponse<ProductResponse> findPageResponseProducts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
         Page<Product> products = productRepository.findAll(pageable);
         List<ProductResponse> productResponses = products
@@ -82,4 +81,10 @@ public class ProductService {
                 products.isLast()
         );
     }
+
+
+    public List<ProductResponse> findAllProductResponse(){
+        return productRepository.findAll().stream().map(mapper::mapProductResponse).toList();
+    }
+
 }

@@ -9,29 +9,28 @@ import org.springframework.stereotype.Component;
 @Component
 public class AddressMapper {
 
-    public Address map(AddressRequest request){
-        return Address.builder()
-                .firstLineAddress(request.firstLineAddress())
-                .secondLineAddress(request.secondLineAddress())
-                .city(request.city())
-                .postCode(request.postCode())
-                .addressType(request.addressType())
-                .current(request.current())
-                .userId(request.userId())
-                .build();
+    public Address map(AddressRequest request) {
+        Address address = new Address();
+        address.setFirstLineAddress(request.firstLineAddress());
+        address.setSecondLineAddress(request.secondLineAddress());
+        address.setCity(request.city());
+        address.setPostCode(request.postCode());
+        address.setAddressType(request.addressType());
+        return address;
     }
 
-    public AddressResponse map(Address address){
-        return AddressResponse.builder()
-                .id(address.getId())
-                .firstLineAddress(address.getFirstLineAddress())
-                .secondLineAddress(address.getSecondLineAddress())
-                .city(address.getCity())
-                .postCode(address.getPostCode())
-                .addressType(address.getAddressType())
-                .current(address.getCurrent())
-                .userId(address.getUserId())
-                .build();
+    public AddressResponse map(Address address) {
+        AddressResponse addressResponse = new AddressResponse();
+        addressResponse.setId(address.getId());
+        addressResponse.setFirstLineAddress(address.getFirstLineAddress());
+        addressResponse.setSecondLineAddress(address.getSecondLineAddress());
+        addressResponse.setCity(address.getCity());
+        addressResponse.setPostCode(address.getPostCode());
+        addressResponse.setAddressType(address.getAddressType());
+        addressResponse.setCurrent(address.getCurrent());
+//        addressResponse.setAddressUserId(address.getAddressUserId());
+
+        return addressResponse;
     }
 
 }

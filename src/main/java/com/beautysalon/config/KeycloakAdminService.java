@@ -1,54 +1,69 @@
 package com.beautysalon.config;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
 
-import java.util.Map;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.representations.idm.RealmRepresentation;
+import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 
 @Service
 public class KeycloakAdminService {
 
-    private final RestClient restClient;
-    private final String serverUrl;
+
     private final String realm;
+    private final String serverUrl;
     private final String clientId;
     private final String clientSecret;
 
-    public KeycloakAdminService(RestClient restClient,
-                                @Value("${spring.keycloak.server-url}") String serverUrl,
+    public KeycloakAdminService(@Value("${spring.keycloak.server-url}") String serverUrl,
                                 @Value("${spring.keycloak.realm}") String realm,
                                 @Value("${spring.keycloak.client-id}") String clientId,
                                 @Value("${spring.keycloak.client-secret}") String clientSecret) {
-        this.restClient= restClient;
         this.serverUrl = serverUrl;
         this.realm = realm;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
     }
-    public String getAccessToken() {
-        String tokenUrl = String.format("%s/realms/%s/protocol/openid-connect/token", serverUrl, realm);
 
-        Map<String, String> response = restClient.post()
-                .uri(tokenUrl)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .body("client_id=" + clientId + "&client_secret=" + clientSecret + "&grant_type=client_credentials")
-                .retrieve()
-                .body(Map.class);
-
-        return response.get("access_token");
+    private Keycloak keycloak() {
+        return KeycloakBuilder.builder()
+                .serverUrl(serverUrl)
+                .realm(realm)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .grantType("client_credentials")
+                .build();
     }
 
-    public String getUsers() {
-        String token = getAccessToken();
-        String userUrl = String.format("%s/admin/realms/%s/users", serverUrl, realm);
-        return restClient
-                .get()
-                .uri(userUrl)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer "+ token)
-                .retrieve()
-                .body(String.class);
+
+
+    public UserRepresentation getUserById(String userId) {
+        try(Keycloak keycloak = keycloak()){
+            RealmResource realmResource = keycloak.realm(realm);
+            return realmResource.users().get(userId).toRepresentation();
+        }catch (Exception e) {
+            throw new RuntimeException("Error fetching user from Keycloak", e);
+        }
+    }
+
+    public List<UserRepresentation> getUsers() {
+        try (Keycloak keycloak = keycloak()) {
+            RealmResource realmResource = keycloak.realm(realm);
+            return realmResource.users().list();
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching users from Keycloak", e);
+        }
+    }
+
+
+    public void close() {
+        this.keycloak().close();
     }
 
 }

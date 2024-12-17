@@ -1,8 +1,6 @@
 package com.beautysalon.file;
 
 import jakarta.annotation.Nonnull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,12 +15,14 @@ import static java.io.File.separator;
 import static java.lang.System.currentTimeMillis;
 
 @Service
-@Slf4j
-@RequiredArgsConstructor
 public class FileStorageService {
 
-    @Value("${application.file.uploads.photos-output-path}")
-    private String fileUploadPath;
+
+    private final String fileUploadPath;
+
+    public FileStorageService(@Value("${application.file.uploads.photos-output-path}")String fileUploadPath) {
+        this.fileUploadPath = fileUploadPath;
+    }
 
     public String saveFile(
             @Nonnull MultipartFile sourceFile,
@@ -42,7 +42,6 @@ public class FileStorageService {
         if (!targetFolder.exists()) {
             boolean folderCreated = targetFolder.mkdirs();
             if (!folderCreated) {
-                log.warn("Failed to create the target folder: " + targetFolder);
                 return null;
             }
         }
@@ -51,10 +50,9 @@ public class FileStorageService {
         Path targetPath = Paths.get(targetFilePath);
         try {
             Files.write(targetPath, sourceFile.getBytes());
-            log.info("File saved to: " + targetFilePath);
             return targetFilePath;
         } catch (IOException e) {
-            log.error("File was not saved", e);
+            e.printStackTrace();
         }
         return null;
     }

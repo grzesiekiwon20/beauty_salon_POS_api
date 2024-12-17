@@ -2,22 +2,25 @@ package com.beautysalon.employee;
 
 
 import com.beautysalon.employee.dto.EmployeeResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("employees")
 public class EmployeeController {
 
     private final EmployeeService service;
 
-    @PostMapping("/createEmployee")
+    public EmployeeController(EmployeeService service) {
+        this.service = service;
+    }
+
+
+    @PostMapping("/addEmployee/{id}")
     public ResponseEntity<Long> createEmployee(
-            @RequestParam String id
+            @PathVariable String id
     ){
         return ResponseEntity.ok(service.saveEmployee(id));
     }

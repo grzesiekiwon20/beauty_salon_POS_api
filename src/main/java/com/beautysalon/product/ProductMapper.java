@@ -12,32 +12,35 @@ import java.util.ArrayList;
 @Component
 public class ProductMapper {
 
-    public Product mapProduct(ProductRequest productRequest){
-        return Product.builder()
-                .name(productRequest.name())
-                .description(productRequest.description())
-                .price(productRequest.price())
-                .discount(productRequest.discount())
-                .specialPrice(productRequest.specialPrice())
-                .stockQuantity(productRequest.stockQuantity())
-                .image(productRequest.image())
-                .products(new ArrayList<>())
-                .orderItems(new ArrayList<>())
-                .build();
+    public Product mapProduct(ProductRequest productRequest) {
+        Product product = new Product();
+        product.setName(productRequest.name());
+        product.setDescription(productRequest.description());
+        product.setPrice(productRequest.price());
+        product.setDiscount(productRequest.discount());
+        product.setSpecialPrice(productRequest.specialPrice());
+        product.setStockQuantity(productRequest.stockQuantity());
+        product.setInventoryStatus(productRequest.inventoryStatus());
+        product.setImage(productRequest.image());
+        product.setProducts(new ArrayList<>());
+        product.setOrderItems(new ArrayList<>());
+        return product;
     }
 
-    public ProductResponse mapProductResponse(Product product){
-        return ProductResponse.builder()
-                .name(product.getName())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .discount(product.getDiscount())
-                .specialPrice(product.getSpecialPrice())
-                .stockQuantity(product.getStockQuantity())
-                .image(FileUtils.readFileFromLocation(product.getImage()))
-                .category(product.getCategory())
-                .products(product.getProducts().stream().map(BaseEntity::getId).toList())
-                .orderItems(product.getOrderItems().stream().map(BaseEntity::getId).toList())
-                .build();
+    public ProductResponse mapProductResponse(Product product) {
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setId(product.getId());
+        productResponse.setName(product.getName());
+        productResponse.setDescription(product.getDescription());
+        productResponse.setPrice(product.getPrice());
+        productResponse.setDiscount(product.getDiscount());
+        productResponse.setSpecialPrice(product.getSpecialPrice());
+        productResponse.setStockQuantity(product.getStockQuantity());
+        productResponse.setInventoryStatus(product.getInventoryStatus());
+        productResponse.setImage(FileUtils.readFileFromLocation(product.getImage()));
+        productResponse.setCategory(product.getCategory());
+        productResponse.setProducts(product.getProducts().stream().map(BaseEntity::getId).toList());
+        productResponse.setOrderItems(product.getOrderItems().stream().map(BaseEntity::getId).toList());
+        return productResponse;
     }
 }

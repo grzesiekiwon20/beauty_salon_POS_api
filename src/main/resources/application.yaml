@@ -3,36 +3,29 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${ISSUER_URI}
+          issuer-uri: http://localhost:9090/realms/salon-app
   datasource:
     keycloak:
-      name: ${KEYCLOAK_DB_NAME}
-      username: ${KEYCLOAK_DB_USERNAME}
-      password: ${KEYCLOAK_DB_PASSWORD}
-      url: ${KEYCLOAK_DB_URL}
+      name: keycloak_v1
+      username: postgres
+      password: root
+      url: jdbc:postgresql://localhost:5436/keycloak_v1
       driver-class-name: org.postgresql.Driver
     postgres:
-      name: ${POSTGRES_DB_NAME}
-      username: ${POSTGRES_DB_USERNAME}
-      password: ${POSTGRES_DB_PASSWORD}
-      url: ${POSTGRES_DB_URL}
+      name: postgres
+      username: postgres
+      password: root
+      url: jdbc:postgresql://localhost:5436/postgres
       driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
-#    properties:
-#      jakarta:
-#        persistence:
-#          schema-generation:
-#            scripts:
-#              action: create
-#              create-target: create.sql
-#            create-source: metadata
+    show-sql: true
   keycloak:
-    client-id: ${CLIENT_ID}
-    client-secret: ${CLIENT_SECRET}
-    realm: ${REALM}
-    server-url: ${SERVER_URL}
+    client-id: back-end
+    client-secret: NGIx7DPxYHLGmR1sAJMjP7oLMOlsbG4a
+    realm: salon-app
+    server-url: http://localhost:9090/
 
 server:
   port: 8080
@@ -43,3 +36,6 @@ application:
   file:
     uploads:
       photos-output-path: ./uploads
+logging:
+  level:
+    web: debug

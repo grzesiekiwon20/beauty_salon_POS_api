@@ -1,6 +1,5 @@
 package com.beautysalon.utils;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,7 +10,6 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 
-@Slf4j
 public class KeycloakJwtRolesConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 
     private static final String CLAIM_REALM_ACCESS = "realm_access";

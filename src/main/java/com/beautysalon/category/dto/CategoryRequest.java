@@ -1,16 +1,18 @@
 package com.beautysalon.category.dto;
 
 
-import jakarta.validation.constraints.NotBlank;
+import com.beautysalon.category.SubCategory;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import org.springframework.lang.NonNull;
 
 public record CategoryRequest(
         Long id,
-        @NotBlank
         @NotEmpty
-        @Size(min = 5, max = 15)
+        @Size(min = 5, max = 35)
         String name,
-        String description
+        String description,
+        @NonNull
+        SubCategory subCategory
 ) {
 }
