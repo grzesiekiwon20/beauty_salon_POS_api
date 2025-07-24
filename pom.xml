@@ -46,15 +46,29 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.lettuce/lettuce-core -->
+<!--		<dependency>-->
+<!--			<groupId>io.lettuce</groupId>-->
+<!--			<artifactId>lettuce-core</artifactId>-->
+<!--			<version>6.2.0.RELEASE</version>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -80,11 +94,11 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.stripe</groupId>
-			<artifactId>stripe-java</artifactId>
-			<version>26.5.1</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.stripe</groupId>-->
+<!--			<artifactId>stripe-java</artifactId>-->
+<!--			<version>26.5.1</version>-->
+<!--		</dependency>-->
 	</dependencies>
 
 	<build>

@@ -1,6 +1,6 @@
 package com.beautysalon.payment;
 
-import com.stripe.Stripe;
+//import com.stripe.Stripe;
 
 public class PaymentServer {
 

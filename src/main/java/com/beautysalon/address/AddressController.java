@@ -24,26 +24,26 @@ public class AddressController {
         this.service = service;
     }
 
-//    @PostMapping("/addAddress")
-//    public ResponseEntity<Long> addAddress(
-//            @Valid @RequestBody AddressRequest request,
-//            @RequestParam Boolean current,
-//            Authentication connectedUser
-//    ){
-//        return ResponseEntity.ok(service.saveAddress(request, connectedUser, current));
-//    }
+    @PostMapping("/addAddress")
+    public ResponseEntity<Long> addAddress(
+            @Valid @RequestBody AddressRequest request,
+            @RequestParam Boolean current,
+            Authentication connectedUser
+    ){
+        return ResponseEntity.ok(service.saveAddress(request, connectedUser, current));
+    }
 
     @GetMapping("/all")
     public ResponseEntity<List<AddressResponse>> getAllAddressResponse(){
         return ResponseEntity.ok(service.getAllAddresses());
     }
 
-//    @GetMapping("/userId")
-//    public ResponseEntity<List<AddressResponse>> getAddressesResponseForConnectedUser(
-//            Authentication connectedUser
-//    ){
-//        return ResponseEntity.ok(service.getAddressById(connectedUser));
-//    }
+    @GetMapping("/userId")
+    public ResponseEntity<List<AddressResponse>> getAddressesResponseForConnectedUser(
+            Authentication connectedUser
+    ){
+        return ResponseEntity.ok(service.getAddressById(connectedUser));
+    }
     @PutMapping("/update-address/{addressId}")
     public ResponseEntity<Long> updateAddress(
             @PathVariable Long addressId,
@@ -57,14 +57,13 @@ public class AddressController {
     ){
         return ResponseEntity.ok(service.findAddressResponseById(addressId));
     }
-//    @DeleteMapping("/remove/{addressId}")
-//    @ResponseStatus(HttpStatus.ACCEPTED)
-//    public void removeAddressById(
-//            @PathVariable Long addressId,
-//            Authentication connectedUser
-//    ){
-//        service.removeById(addressId, connectedUser);
-//    }
+    @DeleteMapping("/remove/{addressId}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void removeAddressById(
+            @PathVariable Long addressId
+    ){
+        service.removeById(addressId);
+    }
 //    @GetMapping("/currentList")
 //    public ResponseEntity<List<AddressResponse>> getCurrentAddressesList(
 //            Authentication connectedUser,

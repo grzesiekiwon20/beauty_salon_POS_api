@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @Tag(name = "Category", description = "The Category Api")
-@RequestMapping("/categories")
+@RequestMapping("categories")
 public class CategoryController {
 
     private final CategoryService service;
@@ -27,18 +27,18 @@ public class CategoryController {
         return ResponseEntity.ok(service.save(categoryRequest));
     }
 
-    @GetMapping("/")
+    @GetMapping("/public/")
     public ResponseEntity<List<CategoryResponse>> getAllCategories(){
         return ResponseEntity.ok(service.getAllCategories());
     }
-    @GetMapping("/subCategory")
+    @GetMapping("/public/subCategory")
     public ResponseEntity<List<CategoryResponse>> getCategoriesBySubcategory(
             @RequestParam SubCategory subCategory
     ){
         return ResponseEntity.ok(service.findCategoriesBySubcategory(subCategory));
     }
 
-    @GetMapping("/{categoryId}")
+    @GetMapping("/public/{categoryId}")
     public ResponseEntity<CategoryResponse> getCategoriesById(
             @PathVariable Long categoryId
     ){

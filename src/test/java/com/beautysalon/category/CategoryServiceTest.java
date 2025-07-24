@@ -11,8 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {
@@ -23,17 +22,10 @@ public class CategoryServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
-
     @Test
     void checkIfCategorySavedProperly() {
-//        CategoryRequest categoryRequest = new CategoryRequest(null, "Eyelashes", "no description", SubCategory.SERVICES);
+        CategoryRequest categoryRequest = new CategoryRequest(null, "Eyelashes", "no description", SubCategory.Services);
 
-//        when(categoryRepository.save())
-
-//        Long result = categoryService.save(categoryRequest);
-
-//        verify(categoryRepository).save(category);
-//        Assertions.assertNotNull(result);
 
     }
 }

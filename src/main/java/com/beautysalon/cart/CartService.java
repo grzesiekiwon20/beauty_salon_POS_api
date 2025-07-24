@@ -5,17 +5,13 @@ import com.beautysalon.cart.dto.CartResponse;
 import com.beautysalon.cartitem.CartItem;
 import com.beautysalon.cartitem.CartItemRepository;
 import com.beautysalon.cartitem.CartItemService;
-import com.beautysalon.cartitem.dto.CartItemResponse;
-import com.beautysalon.customer.Customer;
 import com.beautysalon.customer.CustomerRepository;
 import com.beautysalon.customer.CustomerService;
-import com.beautysalon.exception.CartAlreadyExistsException;
 import com.beautysalon.product.InventoryStatus;
 import com.beautysalon.product.Product;
 import com.beautysalon.product.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -41,29 +37,38 @@ public class CartService {
         this.cartMapper = cartMapper;
     }
 
-    @Transactional
-    public Long createCartForCustomer(Authentication authentication) {
-        Customer customer = getOrCreateCustomer(authentication);
-        if (cartRepository.findByCustomerId(customer.getId()) == null) {
+
+    public Long createCart(String sessionId) {
+        Cart existingCart = cartRepository.findBySessionId(sessionId);
+        if (existingCart != null) {
+            return existingCart.getId();
+        } else {
             Cart cart = new Cart();
-            cart.setCustomer(customer);
-            cart.setCartItems(new HashSet<>());
+            cart.setSessionId(sessionId);
+            return cartRepository.save(cart).getId();
         }
-        return cartRepository.findByCustomerId(customer.getId()).getId();
     }
 
-    public CartResponse findCartResponse(Long cartId) {
-        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new NoSuchElementException("No cart found with id: " + cartId));
-        return cartMapper.mapCart(cart);
+    public CartResponse getCartBySessionId(String sessionId) {
+        Cart cart = cartRepository.findBySessionId(sessionId);
+        if (cart != null) {
+            return cartMapper.mapCart(cart);
+        } else {
+            throw new EntityNotFoundException("Cart not found for sessionId: " + sessionId);
+        }
     }
+
+    public void deleteCart(Long cartId) {
+        cartRepository.deleteById(cartId);
+    }
+
 
     @Transactional
-    public CartResponse addProductToCart(Long productId, Integer quantity, Authentication authentication) {
-        Customer customer = getOrCreateCustomer(authentication);
-
-        Cart cart = cartRepository.findByCustomerId(customer.getId());
-
-
+    public CartResponse updateCart(Long productId, Integer quantity, String sessionId) {
+        Cart cart = cartRepository.findBySessionId(sessionId);
+        if (cart == null) {
+            throw new EntityNotFoundException("Cart Not Found for sessionId: " + sessionId);
+        }
         Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("No product found with id: " + productId));
 
         if (Objects.equals(product.getInventoryStatus(), InventoryStatus.OutOfStock)) {
@@ -80,7 +85,7 @@ public class CartService {
                         () -> new NoSuchElementException("No cart item found")
                 );
 
-        Set<CartItem> cartProductList = cart.getCartItems();
+        List<CartItem> cartProductList = cart.getCartItems();
         cartProductList.add(cartItem);
         cart.setCartItems(cartProductList);
         cart.setTotalPrice(getTotalPrice(cartProductList));
@@ -91,21 +96,12 @@ public class CartService {
                 .findById(cartId)
                 .map(cartMapper::mapCart)
                 .orElseThrow(
-                        () -> new NullPointerException("No cart found with id: " + cartId)
+                        () -> new EntityNotFoundException("No cart found with id: " + cartId)
                 );
 
     }
 
-    private Customer getOrCreateCustomer(Authentication authentication) {
-        Customer customer = customerRepository.findCustomerByUserKeycloakId(authentication.getName());
-        if (customer == null) {
-            Long userId = customerService.saveUserIntoRepository(authentication.getName());
-            customer = customerRepository.findCustomerByUserKeycloakId(authentication.getName());
-        }
-        return customer;
-    }
-
-    private Double getTotalPrice(Set<CartItem> cartItems) {
+    private Double getTotalPrice(List<CartItem> cartItems) {
         double total = 0.00;
         for (CartItem cartItem : cartItems) {
             double discount = cartItem.getProduct().getDiscount() / 100;

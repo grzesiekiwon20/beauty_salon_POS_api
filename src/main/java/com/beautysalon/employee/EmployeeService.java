@@ -3,8 +3,6 @@ package com.beautysalon.employee;
 
 import com.beautysalon.config.KeycloakAdminService;
 import com.beautysalon.employee.dto.EmployeeResponse;
-import com.beautysalon.customer.Customer;
-import com.beautysalon.customer.CustomerService;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.stereotype.Service;
 

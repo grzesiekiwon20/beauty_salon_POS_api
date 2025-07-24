@@ -1,22 +1,18 @@
 package com.beautysalon.config;
 
 
-import io.swagger.v3.oas.models.PathItem;
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.web.client.RestClient;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import io.lettuce.core.RedisClient;
+
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Map;
 
 
 @Configuration

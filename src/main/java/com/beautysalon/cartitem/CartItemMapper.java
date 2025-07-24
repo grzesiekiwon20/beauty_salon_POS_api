@@ -13,7 +13,7 @@ public class CartItemMapper {
     public CartItemResponse cartItemResponse (CartItem cartItem){
         CartItemResponse cartItemResponse = new CartItemResponse();
         cartItemResponse.setId(cartItem.getId());
-        cartItemResponse.setCartId(cartItem.getCart().getId());
+        cartItemResponse.setId(cartItem.getId());
         cartItemResponse.setName(cartItem.getProduct().getName());
         cartItemResponse.setSubTotal(cartItem.getSubTotal());
         cartItemResponse.setQuantity(cartItem.getQuantity());

@@ -8,11 +8,13 @@ import com.beautysalon.cartitem.dto.CartItemResponse;
 import com.beautysalon.product.Product;
 import com.beautysalon.product.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CartItemService {
@@ -29,6 +31,7 @@ public class CartItemService {
         this.mapper = mapper;
     }
 
+
     public Long createCartItem(Long cartId, Long productId, Integer quantity) {
         Product product = productRepository
                 .findById(productId)
@@ -40,17 +43,23 @@ public class CartItemService {
                 .orElseThrow(
                         () -> new EntityNotFoundException("No cart found with cartId: " + cartId)
                 );
-        double subTotal = quantity * product. getPrice();
+        double subTotal = quantity * product.getPrice();
         CartItem cartItem = new CartItem();
-                cartItem.setCart(cart);
-                cartItem.setProduct(product);
-                cartItem.setQuantity(quantity);
-                cartItem.setSubTotal(subTotal);
-        return cartItemRepository.save(cartItem).getId();
+        cartItem.setCart(cart);
+        cartItem.setProduct(product);
+        cartItem.setQuantity(quantity);
+        cartItem.setSubTotal(subTotal);
+
+        cart.getCartItems().forEach(item -> {
+            if(Objects.equals(item.getProduct().getId(), product.getId())){
+               throw new RuntimeException("Item already in the cart!");
+            }
+        } );
+           return cartItemRepository.save(cartItem).getId();
     }
 
     public Long updateQuantity(Long cartItemId, Integer quantity) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(()-> new EntityNotFoundException("Cart item not found"));
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new EntityNotFoundException("Cart item not found"));
 
         double subTotal = quantity * cartItem.getProduct().getPrice();
         cartItem.setQuantity(quantity);
@@ -67,7 +76,7 @@ public class CartItemService {
     }
 
     public Long incrementByOne(Long cartItemId) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(()-> new EntityNotFoundException("Cart item not found"));
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new EntityNotFoundException("Cart item not found"));
 
         Integer quantity = cartItem.getQuantity();
         quantity++;
@@ -78,7 +87,7 @@ public class CartItemService {
     }
 
     public Long decrementByOne(Long cartItemId) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(()-> new EntityNotFoundException("Cart item not found"));
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new EntityNotFoundException("Cart item not found"));
 
         Integer quantity = cartItem.getQuantity();
         quantity--;

@@ -12,13 +12,10 @@ import java.util.List;
 public interface AddressRepository extends JpaRepository<Address, Long> {
 
 
-//    @Query("""
-//            select a from Address a where a.addressUserId=:name and a.current=:current
-//            """)
-//    List<Address> findAddressesByCurrentIsAndId(@Param("current") boolean current, @Param("name") String name);
-//
-//    @Query("""
-//            select  a from Address  a where a.addressUserId=:name
-//            """)
-//    List<Address> findAddressesByUserId(@Param("name") String name);
+
+@Query("""
+select a from Address a where a.customer.id=:id
+""")
+    List<Address> findAddressesByCustomerId(@Param("id") Long id);
+
 }

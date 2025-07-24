@@ -21,23 +21,13 @@ public class Customer extends BaseEntity {
     private String email;
     private String phoneNumber;
 
-    @ManyToMany
-    @JoinTable(
-            name = "customer_address",
-            joinColumns = @JoinColumn(name = "customer_id"),
-            inverseJoinColumns = @JoinColumn(name = "address_id")
-    )
+    @OneToMany(mappedBy = "customer" ,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Address> addresses;
 
     @OneToOne(mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.MERGE},orphanRemoval = true)
     private Cart cart;
 
-    @ManyToMany
-    @JoinTable(
-            name = "customer_activity",
-            joinColumns = @JoinColumn(name = "customer_id"),
-            inverseJoinColumns = @JoinColumn(name = "activity_id")
-    )
+    @OneToMany(mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Activity> activities;
 
 

@@ -2,18 +2,17 @@ package com.beautysalon.cartitem;
 
 
 import com.beautysalon.cart.Cart;
-import com.beautysalon.common.BaseEntity;
 import com.beautysalon.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-public class CartItem extends BaseEntity {
+public class CartItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JsonIgnore
@@ -32,12 +31,20 @@ public class CartItem extends BaseEntity {
     public CartItem() {
     }
 
-    public CartItem(Long id, LocalDateTime createdDate, LocalDateTime lastModifiedDate, String createdBy, String lastModifiedBy, Cart cart, Product product, Integer quantity, double subTotal) {
-        super(id, createdDate, lastModifiedDate, createdBy, lastModifiedBy);
+    public CartItem(Long id, Cart cart, Product product, Integer quantity, double subTotal) {
+        this.id = id;
         this.cart = cart;
         this.product = product;
         this.quantity = quantity;
         this.subTotal = subTotal;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Cart getCart() {

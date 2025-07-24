@@ -1,6 +1,7 @@
 package com.beautysalon.product;
 
 
+import com.beautysalon.cartitem.CartItem;
 import com.beautysalon.common.BaseEntity;
 import com.beautysalon.file.FileUtils;
 import com.beautysalon.product.dto.ProductRequest;
@@ -39,7 +40,7 @@ public class ProductMapper {
         productResponse.setInventoryStatus(product.getInventoryStatus());
         productResponse.setImage(FileUtils.readFileFromLocation(product.getImage()));
         productResponse.setCategory(product.getCategory());
-        productResponse.setProducts(product.getProducts().stream().map(BaseEntity::getId).toList());
+        productResponse.setProducts(product.getProducts().stream().map(CartItem::getId).toList());
         productResponse.setOrderItems(product.getOrderItems().stream().map(BaseEntity::getId).toList());
         return productResponse;
     }

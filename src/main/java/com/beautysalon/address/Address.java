@@ -3,8 +3,10 @@ package com.beautysalon.address;
 
 import com.beautysalon.common.BaseEntity;
 import com.beautysalon.customer.Customer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -16,21 +18,22 @@ import java.util.List;
 public class Address extends BaseEntity{
 
 
-    @NotBlank
+    @NotNull
     private String firstLineAddress;
     private String secondLineAddress;
-    @NotBlank
+    @NotNull
     private String city;
-    @NotBlank
+    @NotNull
     private String postCode;
-    @NotBlank
+    @NotNull
     private AddressType addressType;
     private Boolean current;
 
-    @ManyToMany(mappedBy = "addresses")
-    private List<Customer> customers;
+    @ManyToOne
+    @JsonIgnore
+    private Customer customer;
 
-    public Address(Long id, LocalDateTime createdDate, LocalDateTime lastModifiedDate, String createdBy, String lastModifiedBy, String firstLineAddress, String secondLineAddress, String city, String postCode, AddressType addressType, Boolean current, List<Customer> customers) {
+    public Address(Long id, LocalDateTime createdDate, LocalDateTime lastModifiedDate, String createdBy, String lastModifiedBy, String firstLineAddress, String secondLineAddress, String city, String postCode, AddressType addressType, Boolean current, Customer customer) {
         super(id, createdDate, lastModifiedDate, createdBy, lastModifiedBy);
         this.firstLineAddress = firstLineAddress;
         this.secondLineAddress = secondLineAddress;
@@ -38,17 +41,17 @@ public class Address extends BaseEntity{
         this.postCode = postCode;
         this.addressType = addressType;
         this.current = current;
-        this.customers = customers;
+        this.customer = customer;
     }
 
     public Address() {
     }
 
-    public @NotBlank String getFirstLineAddress() {
+    public String getFirstLineAddress() {
         return firstLineAddress;
     }
 
-    public void setFirstLineAddress(@NotBlank String firstLineAddress) {
+    public void setFirstLineAddress(String firstLineAddress) {
         this.firstLineAddress = firstLineAddress;
     }
 
@@ -60,27 +63,27 @@ public class Address extends BaseEntity{
         this.secondLineAddress = secondLineAddress;
     }
 
-    public @NotBlank String getCity() {
+    public String getCity() {
         return city;
     }
 
-    public void setCity(@NotBlank String city) {
+    public void setCity(String city) {
         this.city = city;
     }
 
-    public @NotBlank String getPostCode() {
+    public String getPostCode() {
         return postCode;
     }
 
-    public void setPostCode(@NotBlank String postCode) {
+    public void setPostCode(String postCode) {
         this.postCode = postCode;
     }
 
-    public @NotBlank AddressType getAddressType() {
+    public AddressType getAddressType() {
         return addressType;
     }
 
-    public void setAddressType(@NotBlank AddressType addressType) {
+    public void setAddressType(AddressType addressType) {
         this.addressType = addressType;
     }
 
@@ -92,11 +95,11 @@ public class Address extends BaseEntity{
         this.current = current;
     }
 
-    public List<Customer> getUsers() {
-        return customers;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setUsers(List<Customer> customers) {
-        this.customers = customers;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

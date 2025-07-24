@@ -5,6 +5,8 @@ import com.beautysalon.employee.Employee;
 import com.beautysalon.service.Service;
 import com.beautysalon.customer.Customer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.lang.NonNull;
@@ -52,6 +54,7 @@ public class Activity extends BaseEntity {
         this.service = service;
     }
 
+    @SuppressWarnings("null")
     public Activity() {
     }
 

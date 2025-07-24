@@ -21,6 +21,6 @@ public record AddressRequest(
 
         @NonNull
         AddressType addressType,
-        Boolean current,
-        String userId) {
+        Boolean current
+        ) {
 }

@@ -35,6 +35,14 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     user: postgres
+  redis:
+    image: redis:latest
+    command: ["redis-server", "--requirepass", "admin"]
+    environment:
+      REDIS_USER: admin
+      REDIS_PASSWORD: admin
+    ports:
+      - "6379:6379"
 
 volumes:
   postgres_data:
