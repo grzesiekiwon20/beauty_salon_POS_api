@@ -8,13 +8,13 @@ spring:
     keycloak:
       name: keycloak_v1
       username: postgres
-      password: root
+      password: ***
       url: jdbc:postgresql://localhost:5436/keycloak_v1
       driver-class-name: org.postgresql.Driver
     postgres:
       name: postgres
       username: postgres
-      password: root
+      password: ***
       url: jdbc:postgresql://localhost:5436/postgres
       driver-class-name: org.postgresql.Driver
   jpa:
@@ -23,7 +23,7 @@ spring:
     show-sql: true
   keycloak:
     client-id: back-end
-    client-secret: NGIx7DPxYHLGmR1sAJMjP7oLMOlsbG4a
+    client-secret: *******
     realm: salon-app
     server-url: http://localhost:9090/
 
