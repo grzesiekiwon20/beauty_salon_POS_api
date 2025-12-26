@@ -3,6 +3,7 @@ package com.beautysalon.address;
 
 import com.beautysalon.address.dto.AddressRequest;
 import com.beautysalon.address.dto.AddressResponse;
+import com.beautysalon.common.MessageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -12,71 +13,54 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @Tag(name = "Address", description = "The Address Api")
 @RestController
-@RequestMapping("addresses")
+@RequestMapping("address")
 public class AddressController {
 
-    private final AddressService service;
+    private final AddressServiceImpl service;
 
-    public AddressController(AddressService service) {
+    public AddressController(AddressServiceImpl service) {
         this.service = service;
     }
 
     @PostMapping("/addAddress")
-    public ResponseEntity<Long> addAddress(
+    public ResponseEntity<MessageResponse> addAddress(
             @Valid @RequestBody AddressRequest request,
-            @RequestParam Boolean current,
             Authentication connectedUser
     ){
-        return ResponseEntity.ok(service.saveAddress(request, connectedUser, current));
+        return ResponseEntity.ok(service.saveAddress(request, connectedUser));
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<AddressResponse>> getAllAddressResponse(){
-        return ResponseEntity.ok(service.getAllAddresses());
-    }
-
-    @GetMapping("/userId")
+    @GetMapping("/username")
     public ResponseEntity<List<AddressResponse>> getAddressesResponseForConnectedUser(
             Authentication connectedUser
     ){
-        return ResponseEntity.ok(service.getAddressById(connectedUser));
+        return ResponseEntity.ok(service.getAddressResponsesListFromRepositoryForConnectedUser(connectedUser));
     }
+
     @PutMapping("/update-address/{addressId}")
-    public ResponseEntity<Long> updateAddress(
+    public ResponseEntity<MessageResponse> updateAddress(
             @PathVariable Long addressId,
-            @RequestBody AddressRequest addressRequest
+            @RequestParam(required = false) String firstLineAddress,
+            @RequestParam (required = false) String secondLineAddress,
+            @RequestParam (required = false) String city,
+            @RequestParam (required = false) String postCode
     ){
-         return ResponseEntity.ok(service.updateExistingAddress(addressId, addressRequest));
+         return ResponseEntity.ok(service.updateExistingAddress(addressId, firstLineAddress,secondLineAddress,city,postCode));
     }
-    @GetMapping("/{addressId}")
+    @GetMapping("/private/{addressId}")
     public ResponseEntity<AddressResponse> getAddressResponseById(
             @PathVariable Long addressId
     ){
         return ResponseEntity.ok(service.findAddressResponseById(addressId));
     }
+
     @DeleteMapping("/remove/{addressId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void removeAddressById(
+    public ResponseEntity<MessageResponse> removeAddressById(
             @PathVariable Long addressId
     ){
-        service.removeById(addressId);
-    }
-//    @GetMapping("/currentList")
-//    public ResponseEntity<List<AddressResponse>> getCurrentAddressesList(
-//            Authentication connectedUser,
-//           @RequestParam boolean current
-//    ){
-//        return ResponseEntity.ok(service.findCurrentAddressesList(current, connectedUser));
-//    }
-
-    @PutMapping("update/current/{id}")
-    public ResponseEntity<Long> setExpiredOrCurrent(
-            @PathVariable Long id,
-            @RequestParam boolean current
-    ) {
-        return ResponseEntity.ok(service.setAddressAsExpiredOrCurrent(id, current));
+        return ResponseEntity.ok(service.removeAddressByAddressId(addressId));
     }
 }

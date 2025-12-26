@@ -1,6 +1,5 @@
 package com.beautysalon.config;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -8,8 +7,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
-import io.lettuce.core.RedisClient;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,7 +21,6 @@ public class BeansConfig {
     public AuditorAware<String> auditorAware() {
         return new ApplicationAuditAware();
     }
-
     @Bean
     public CorsFilter corsFilter() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -35,7 +31,8 @@ public class BeansConfig {
                 HttpHeaders.ORIGIN,
                 HttpHeaders.CONTENT_TYPE,
                 HttpHeaders.ACCEPT,
-                HttpHeaders.AUTHORIZATION
+                HttpHeaders.AUTHORIZATION,
+                HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN
         ));
         config.setAllowedMethods(Arrays.asList(
                 "GET",
@@ -46,7 +43,6 @@ public class BeansConfig {
         ));
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
-
     }
 }
 

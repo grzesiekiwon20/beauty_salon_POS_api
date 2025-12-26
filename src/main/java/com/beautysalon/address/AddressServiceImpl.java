@@ -10,9 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @Service
@@ -80,7 +78,10 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public MessageResponse removeAddressByAddressId(Long addressId) {
-
+        Address address = addressRepository.findById(addressId).orElseThrow(()-> new EntityNotFoundException("Address not found with id: " + addressId));
+        UserEntity user = userRepository.findUserByAddressId(addressId);
+        user.getAddresses().remove(address);
+        addressRepository.delete(address);
         return new MessageResponse("Address removed successfully");
     }
 
@@ -95,5 +96,6 @@ public class AddressServiceImpl implements AddressService {
     public AddressResponse getAddressResponseByAddressId(Long addressId) {
         return null;
     }
+
 
 }
