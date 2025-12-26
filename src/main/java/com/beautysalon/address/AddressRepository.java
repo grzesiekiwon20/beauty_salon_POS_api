@@ -12,10 +12,8 @@ import java.util.List;
 public interface AddressRepository extends JpaRepository<Address, Long> {
 
 
-
-@Query("""
-select a from Address a where a.customer.id=:id
+    @Query(value = """
+    select a from Address a join  a.users u where u.username=:username
 """)
-    List<Address> findAddressesByCustomerId(@Param("id") Long id);
-
+    List<Address> getAddressesByUsername(String username);
 }
