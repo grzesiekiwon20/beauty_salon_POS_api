@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <nav class="navbar navbar-expand-md bg-white shadow-sm fixed-top">
+                    <div class="container-fluid">
+
+                        <a class="navbar-brand fw-bold" th:href="@{/}">Beauty Salon</a>
+
+                        <button class="navbar-toggler" type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#mainNavbarCollapse"
+                                aria-controls="mainNavbarCollapse"
+                                aria-expanded="false"
+                                aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="mainNavbarCollapse">
+
+                            <!-- Left Menu -->
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/home}">Home</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button"
+                                       data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                                    <ul class="dropdown-menu">
+                                        <!--/*@thymesVar id="shopCategories" type="com.beautysalon.webmvc.GlobalModelAdvice"*/-->
+                                        <li th:each="category : ${shopCategories}">
+                                            <a class="dropdown-item"
+                                               th:text="${category.name()}"
+                                               th:href="@{/products/byCategory/{categoryId}(categoryId=${category.categoryId()})}"></a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item"
+                                               th:href="@{/products/all}">
+                                                All Products
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" th:href="@{/cart/getCart}">Cart</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button"
+                                       data-bs-toggle="dropdown" aria-expanded="false">Services</a>
+                                    <ul class="dropdown-menu">
+                                        <!--/*@thymesVar id="servicesCategories" type="com.beautysalon.webmvc.GlobalModelAdvice"*/-->
+                                        <li th:each="category : ${servicesCategories}">
+                                            <a class="dropdown-item"
+                                               th:text="${category.name()}"
+                                               th:href="@{/services/byCategory/{categoryId}(categoryId=${category.categoryId()})}"></a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item"
+                                               th:href="@{/services/all}">
+                                                All Services
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <!-- Right Menu -->
+                            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/account}">Account</a>
+                                </li>
+                                <li th:if="${!authenticated}" class="nav-item">
+                                    <a class="nav-link" th:href="@{/login}">Login</a>
+                                </li>
+                                <li th:if="${!authenticated}" class="nav-item">
+                                    <a class="nav-link active fw-bold" th:href="@{/users/register}">Register</a>
+                                </li>
+                                <li th:if="${authenticated}" class="nav-item">
+                                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid vh-100 mt-5">
+        <div class="row">
+            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <section layout:fragment="allProducts"></section>
+                <section layout:fragment="allProductsByCategory"></section>
+                <section layout:fragment="home"></section>
+                <section layout:fragment="account_content"></section>
+                <section layout:fragment="productDetail"></section>
+                <section layout:fragment="create_activity_layout"></section>
+                <section layout:fragment="allServices"></section>
+                <section layout:fragment="allServicesByCategory"></section>
+                <section layout:fragment="serviceDetail"></section>
+                <section layout:fragment="cart"></section>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous">
+
+</script>
+</body>
+</html>
