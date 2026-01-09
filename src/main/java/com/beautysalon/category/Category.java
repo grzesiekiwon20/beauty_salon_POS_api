@@ -1,13 +1,9 @@
 package com.beautysalon.category;
 
 
-import com.beautysalon.product.Product;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.List;
 
 
 @Entity
