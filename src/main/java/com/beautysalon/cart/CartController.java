@@ -1,58 +1,73 @@
 package com.beautysalon.cart;
 
 
-import com.beautysalon.cart.dto.CartResponse;
-import com.beautysalon.cartitem.CartItem;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Set;
 
 
-@Tag(name = "Cart", description = "The Cart Api")
-@RestController
-@RequestMapping("carts")
+@Controller
+@RequestMapping("cart")
+@RequiredArgsConstructor
 public class CartController {
 
-    private final CartService cartService;
-
-    public CartController(CartService cartService) {
-        this.cartService = cartService;
-    }
+    private final CartService service;
 
 
-    @PutMapping("/addProductToCart/{productId}/quantity")
-    public ResponseEntity<CartResponse> updateCart(
-            @PathVariable Long productId,
-            @RequestParam Integer quantity,
-            @RequestParam String sessionId
+    @GetMapping("/getCart")
+    public String createCart(
+            Model model, Authentication authentication, HttpSession session
     ) {
-        return ResponseEntity.ok(cartService.updateCart(productId, quantity, sessionId));
+        Set<CartItem> cartItems = service.getCart(authentication, session).getCartItemSet();
+        model.addAttribute("cart", service.getCart(authentication, session));
+        model.addAttribute("cartItems", cartItems);
+        return "shopping_cart";
     }
 
-    @GetMapping("/bySessionId/{sessionId}")
-    public ResponseEntity<CartResponse> getCart(
-            @PathVariable String sessionId
+    @PostMapping("/addItem")
+    public String addItem(
+            Model model,
+            Authentication authentication,
+            HttpSession session,
+            @RequestParam Long productId,
+            @RequestParam(defaultValue = "1") Integer quantity,
+            @RequestParam(required = false) Long categoryId
     ) {
-        return ResponseEntity.ok(cartService.getCartBySessionId(sessionId));
+        Set<CartItem> set = service.addItemToCart(authentication, session, productId, quantity).getCartItemSet();
+        model.addAttribute("cart", service.getCart(authentication, session));
+        model.addAttribute("cartItems", set);
+        model.addAttribute("categoryId", categoryId);
+        if (categoryId == null) {
+            return "redirect:/products/all";
+        } else {
+            return "redirect:/products/buCategory/{categoryId}";
+        }
+
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Long> createCart(
-            @RequestParam String sessionId
+    @PostMapping("/update")
+    public String updateCart(
+            @RequestParam Long cartItemId,
+            @RequestParam(required = false) String up,
+            @RequestParam(required = false) String down
     ) {
-        return ResponseEntity.ok(cartService.createCart(sessionId));
+        service.updateCart(cartItemId, up, down);
+        return "redirect:/cart/getCart";
     }
 
-
-    @DeleteMapping("/{cartId}")
-    public ResponseEntity<Void> deleteCart(@PathVariable Long cartId) {
-        cartService.deleteCart(cartId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    @GetMapping("/clear")
+    public String clearCart(
+            Authentication authentication, HttpSession session
+    ) {
+        service.clearCart(authentication, session);
+        return "redirect:/cart/getCart";
     }
-
 }
