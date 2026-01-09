@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{main.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+<section layout:fragment="allProducts">
+    <div class="container">
+        <div class="row justify-content-center min-vh-100 align-items-start pt-5 gy-1">
+            <div class="col-12">
+                <div class="d-flex flex-wrap justify-content-center gap-4 p-5"
+                     th:unless="${#lists.isEmpty(allProducts)}">
+                    <div th:each="product : ${allProducts}" class="card shadow-sm border-0" style="width: 18rem;">
+                        <img th:if="${product.image() != null and product.image().length > 0}"
+                             th:src="@{'data:image/jpeg;base64,' + ${product.imageBase64()}}"
+                             class="card-img-top"
+                             style="height: 200px; object-fit: cover;"
+                             th:alt="${product.name()}"/>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-black text-opacity-50" th:text="${product.name()}"></h5>
+                            <h6 class="fw-bold text-black text-opacity-50" th:text="'€' + ${product.price()}"></h6>
+                            <div class="d-flex flex-column align-items-center">
+                                <form class="d-flex flex-row justify-content-between p-1 align-items-center" th:action="@{/cart/addItem}" th:method="post">
+                                    <div>
+                                        <input type="hidden"  name="url" th:value="${product.category().getId()}">
+                                        <input type="hidden" name="productId" th:value="${product.id()}">
+                                        <label for="quantity">Qty: </label>
+                                        <input class="rounded-1" type="number" id="quantity" name="quantity" style="width: 35%">
+                                    </div>
+                                    <button class="btn opacity-75 w-75 h-75 p-1" type="submit" style="background-color:#FFD700 ">Add
+                                        to Cart
+                                    </button>
+                                </form>
+                                <a th:href="@{/products/byId/{productId}(productId=${product.id()})}"
+                                   class="btn btn-primary opacity-75 w-75 h-75 p-2">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div layout:fragment="productDetail" class="" th:if="${productDetails != null}">
+                        <div class="container" th:object="${productDetails}">
+                            <div class="row d-flex bg-gray vh-100 align-items-center justify-content-center border-5 border-black">
+                                <div class="col-xl-10 col-lg-12 col-md-8 col-sm-6  bg-black">
+                                    <div class="col-lg-2 col-md-4 col-sm-1">
+                                        <div>
+                                            <h6 th:text="${productDetails.name()}"></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:if="${#lists.isEmpty(allProducts) && #lists.isEmpty(allProductsCategory) && productDetails == null}"
+                         class="text-center py-5">
+                        <p class="text-muted">No products found in this subcategory.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

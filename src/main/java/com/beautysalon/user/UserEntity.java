@@ -1,9 +1,11 @@
 package com.beautysalon.user;
 
 
+import com.beautysalon.activity.Activity;
 import com.beautysalon.address.Address;
 import com.beautysalon.common.BaseEntity;
 import com.beautysalon.role.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -17,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,8 +39,9 @@ public class UserEntity implements UserDetails {
     private String userId;
 
     private String username;
-
     private String password;
+    private String fullName;
+    private String phone;
 
     private String email;
     private boolean enabled;
@@ -55,8 +59,17 @@ public class UserEntity implements UserDetails {
             name = "user_address",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "address_id"))
+
     private Set<Address> addresses;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_activity",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "activity_id")
+    )
+    @JsonIgnore
+    private List<Activity> activities;
 
     @Override
     @NonNull

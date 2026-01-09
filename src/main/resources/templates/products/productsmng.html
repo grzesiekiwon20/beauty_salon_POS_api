@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/account/account.html}"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Products Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+<div layout:fragment="product_management_layout">
+    <form action="#"
+          th:action="@{/products/save}"
+          th:object="${product}"
+          enctype="multipart/form-data"
+          method="POST">
+        <label for="name">Name: </label>
+        <input id="name" type="text" th:field="*{name}" placeholder="Product name"
+               class="form-control mb-4 col-4">
+        <label for="desc">Description: </label>
+        <input id="desc" type="text"
+               th:field="*{description}" placeholder="Description"
+               class="form-control mb-4 col-4">
+
+        <label for="category">Category: </label>
+        <select class="form-control mb-4 col-4" id="category" type="number" th:field="*{category}">
+                <!--/*@thymesVar id="shopCategories" type="com.beautysalon.webmvc.GlobalModelAdvice"*/-->
+                <option
+                        th:each="categoryResponse: ${shopCategories}"
+                        th:value="${categoryResponse.categoryId()}"
+                        th:text="${categoryResponse.name()}"
+                ></option>
+        </select>
+
+        <label for="productQuantity">Quantity: </label>
+        <input id="productQuantity"
+               type="number"
+               placeholder="Quantity"
+               th:field="*{stockQuantity}"
+               class="form-control mb-4 col-4">
+
+        <label for="price">Price: </label>
+        <input id="price" type="text"
+               th:field="*{price}" placeholder="Price"
+               class="form-control mb-4 col-4">
+
+        <label for="file">Product Image:</label>
+        <input type="file"
+               name="file" id="file"
+               class="form-control mb-4 col-4">
+
+        <button type="submit" class="btn btn-info col-2">Save Product</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

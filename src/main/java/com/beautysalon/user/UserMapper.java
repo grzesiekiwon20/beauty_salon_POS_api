@@ -17,11 +17,13 @@ import java.util.stream.Collectors;
 public class UserMapper {
 
 
-    public UserEntity toEntity(UserEntityRequest request) {
+    public UserEntity toEntity(UserEntityRequest request, PasswordEncoder passwordEncoder) {
         return UserEntity.builder()
-                .username(request.username())
-                .password(request.password())
-                .email(request.email())
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .email(request.getEmail())
+                .phone(request.getPhone())
+                .fullName(request.getFullName())
                 .enabled(true)
                 .locked(false)
                 .addresses(new HashSet<>())
@@ -34,10 +36,12 @@ public class UserMapper {
                 .userId(userEntity.getUserId())
                 .username(userEntity.getUsername())
                 .password(userEntity.getPassword())
+                .fullName(userEntity.getFullName())
+                .phone(userEntity.getPhone())
                 .email(userEntity.getEmail())
                 .enabled(userEntity.isEnabled())
                 .locked(userEntity.isLocked())
-                .roles(userEntity.getRoles().stream().map(Role::getId).collect(Collectors.toSet()))
+                .roles(userEntity.getRoles())
                 .addresses(userEntity.getAddresses().stream().map(BaseEntity::getId).collect(Collectors.toSet())).build();
     }
 }

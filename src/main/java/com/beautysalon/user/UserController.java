@@ -1,31 +1,64 @@
 package com.beautysalon.user;
 
 
+import com.beautysalon.address.AddressServiceImpl;
 import com.beautysalon.user.dto.UserEntityResponse;
 import com.beautysalon.user.dto.UserEntityRequest;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+import java.security.Principal;
+import java.util.Base64;
+import java.util.List;
+
+@Controller
 @RequestMapping("users")
-@Tag(name = "UserEntity Api")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;
+    private final PasswordEncoder passwordEncoder;
+    private final AddressServiceImpl addressService;
 
-    public UserController(UserServiceImpl userServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
+
+
+    @GetMapping(value = "/register")
+    public String registerUser(Model model){
+        UserEntityRequest userEntityRequest = new UserEntityRequest();
+        model.addAttribute("user" , userEntityRequest);
+        return "/user/registerForm";
     }
-
-
-    @PostMapping(value = "/register" , name = "Register user post method")
-    public ResponseEntity<UserEntityResponse> registerUser(
-            @RequestBody UserEntityRequest userEntityRequest
+    @PostMapping("/save")
+    public String saveUser(
+            @ModelAttribute("user") @Valid UserEntityRequest userEntityRequest
     ){
-        return ResponseEntity.ok(userServiceImpl.registerUser(userEntityRequest));
+        userServiceImpl.registerUser(userEntityRequest, passwordEncoder);
+        return "redirect:/";
     }
+
+    @GetMapping("/user" )
+    public String  getUserByUsername( Model model,
+            Authentication authentication
+    ){
+        model.addAttribute("addressDetails", addressService.findUsersHomeAddress(authentication));
+        model.addAttribute("userDetails" , userServiceImpl.getLoggedInUserDetails(authentication));
+        return "/user/user_details";
+    }
+
+
+    @GetMapping("/byRole/{roleName}")
+    public String listOfUsersWithGivenRole(
+           @PathVariable final String roleName, Model model){
+        ;
+        return "employees";
+    }
+
 }

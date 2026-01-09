@@ -1,72 +1,76 @@
 package com.beautysalon.product;
 
-import com.beautysalon.category.SubCategory;
-import com.beautysalon.common.PageResponse;
 import com.beautysalon.product.dto.ProductRequest;
 import com.beautysalon.product.dto.ProductResponse;
-
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.RedisURI;
-import io.lettuce.core.api.StatefulRedisConnection;
-import io.lettuce.core.api.sync.RedisCommands;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
-@Tag(name = "Product", description = "The Product Api")
-@RestController
-@RequestMapping("products")
+@Controller
+@RequestMapping("/products")
+@RequiredArgsConstructor
 public class ProductController {
 
-    private final ProductService service;
+    private final ProductServiceImpl service;
 
-    public ProductController(ProductService service) {
-        this.service = service;
+    @GetMapping("/addNew")
+    public String addNewProduct(Model model) {
+        ProductRequest productRequest = new ProductRequest();
+        model.addAttribute("product", productRequest);
+        return "/products/productsmng";
     }
 
-    @PostMapping("/addProduct/{categoryId}")
-    public ResponseEntity<Long> createProduct(
-            @PathVariable Long categoryId,
-            @Valid @RequestBody ProductRequest productRequest) {
-        return ResponseEntity.ok(service.saveProduct(productRequest, categoryId));
+    @PostMapping("/save")
+    public String saveProduct(
+            @ModelAttribute("product") @Valid ProductRequest product,
+            @RequestParam("file") MultipartFile file) {
+        service.saveProduct(product, file);
+        return "redirect:/";
     }
 
-    @GetMapping("/{productId}")
-    public ResponseEntity<ProductResponse> getProductById(
+    @GetMapping("/byCategory/{categoryId}")
+    public String viewProductsByCategoryId(
+           @PathVariable Long categoryId,
+           Model model
+    ) {
+        model.addAttribute("allProducts", service.findProductsByCategoryId(categoryId));
+        return "/products/products";
+    }
+
+    @GetMapping("/byId/{productId}")
+    public String getProductResponseById( Model model,
             @PathVariable Long productId) {
-        return ResponseEntity.ok(service.findProductResponseById(productId));
+        model.addAttribute("productDetails", service.findProductResponseByProductId(productId));
+        return "/products/products";
+    }
+    @GetMapping("/all")
+    public String getAllProducts(
+            Model model
+    ){
+        model.addAttribute("allProducts", service.findProductsList());
+        return "/products/products";
     }
 
-    @PostMapping(value = "/cover/{product-id}", consumes = "multipart/form-data")
-    public ResponseEntity<?> uploadProductCoverPicture(
-            @PathVariable("product-id") Long productId,
-            @Parameter() @RequestPart("file") MultipartFile file) {
-        service.uploadProductCoverPicture(file, productId);
-        return ResponseEntity.accepted().build();
-    }
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> getProductImage(@PathVariable Long id) {
+        ProductResponse product = service.findProductResponseByProductId(id);
 
-    @GetMapping("/byCategoryId/{categoryId}")
-    public ResponseEntity<List<ProductResponse>> getProductsByCategoryId(
-            @PathVariable Long categoryId) {
-        return ResponseEntity.ok(service.findProductsByCategoryId(categoryId));
-    }
+        if (product.image() == null || product.image().length == 0) {
+            return ResponseEntity.notFound().build();
+        }
 
-    @GetMapping("/page/")
-    public ResponseEntity<PageResponse<ProductResponse>> getPageResponseProducts(
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "size", defaultValue = "10", required = false) int size) {
-        return ResponseEntity.ok(service.findPageResponseProducts(page, size));
-    }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
 
-    @GetMapping("/")
-    public ResponseEntity<List<ProductResponse>> getAllProducts() {
-        return ResponseEntity.ok(service.findAllProductResponse());
+        return new ResponseEntity<>(product.image(), headers, HttpStatus.OK);
     }
-
-    
 }
+
+

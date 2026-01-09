@@ -1,6 +1,7 @@
 package com.beautysalon.user.dto;
 
 
+import com.beautysalon.role.Role;
 import lombok.Builder;
 import java.util.Set;
 
@@ -10,9 +11,11 @@ public record UserEntityResponse(
         String username,
         String password,
         String email,
+        String fullName,
+        String phone,
         boolean enabled,
         boolean locked,
-        Set<Long> roles,
+        Set<Role> roles,
         Set<Long> addresses
 )
 { }

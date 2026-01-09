@@ -1,22 +1,21 @@
-package com.beautysalon.product.dto;
+package com.beautysalon.serviceentity.dto;
 
-import com.beautysalon.category.Category;
+
 import lombok.Builder;
 
 import java.time.LocalTime;
 import java.util.Base64;
 
 @Builder
-public record ProductResponse(
+public record ServiceEntityResponse(
         Long id,
         String name,
+        String categoryName,
+        Long categoryId,
         String description,
         Double price,
-        double discount,
-        double specialPrice,
-        byte[] image,
-        Category category,
-        Integer stockQuantity
+        LocalTime duration,
+        byte[] image
 ) {
     public String imageBase64() {
         if (image == null || image.length == 0) {

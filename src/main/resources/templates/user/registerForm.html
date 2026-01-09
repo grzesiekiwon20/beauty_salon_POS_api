@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center min-vh-100 align-items-center pt-5">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-5">
+
+                    <h2 class="text-center mb-4 fw-bold">Create Your Account</h2>
+                    <p class="text-center text-muted mb-4">Join us and book your beauty serviceEntities easily</p>
+
+<!--                    &lt;!&ndash; Global Error Message (e.g., username taken) &ndash;&gt;-->
+<!--                    <div th:if="${errorMsg != null}" class="alert alert-danger" role="alert">-->
+<!--                        <span th:text="${errorMsg}"></span>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; Success Message (optional, if redirected after success) &ndash;&gt;-->
+<!--                    <div th:if="${successMsg != null}" class="alert alert-success" role="alert">-->
+<!--                        <span th:text="${successMsg}"></span>-->
+<!--                    </div>-->
+
+                    <!-- Registration Form -->
+                    <form th:action="@{/users/save}"
+                          th:object="${user}"
+                          method="post"
+                          novalidate>
+
+                        <!-- Username -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label fw-medium">Username</label>
+                            <input type="text" class="form-control form-control-lg"
+                                   id="username" th:field="*{username}" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}"
+                                 th:errors="*{username}"></div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label fw-medium">Email</label>
+                            <input type="email" class="form-control form-control-lg"
+                                   id="email" th:field="*{email}" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}"
+                                 th:errors="*{email}"></div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label fw-medium">Password</label>
+                            <input type="password" class="form-control form-control-lg"
+                                   id="password" th:field="*{password}" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}"
+                                 th:errors="*{password}"></div>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="mb-3">
+                            <label for="confirm" class="form-label fw-medium">Confirm Password</label>
+                            <input type="password" class="form-control form-control-lg"
+                                   id="confirm" th:field="*{confirm}" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('confirm')}"
+                                 th:errors="*{confirm}"></div>
+                        </div>
+
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label fw-medium">Full Name</label>
+                            <input type="text" class="form-control form-control-lg"
+                                   id="fullName" th:field="*{fullName}" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('fullName')}"
+                                 th:errors="*{fullName}"></div>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="mb-3">
+                            <label for="phone" class="form-label fw-medium">Phone Number</label>
+                            <input type="tel" class="form-control form-control-lg"
+                                   id="phone" th:field="*{phone}">
+                        </div>
+
+                        <hr class="my-4">
+
+                        <h5 class="mb-3">Address Details (Optional)</h5>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="street" class="form-label">Street</label>
+                                <input type="text" class="form-control" id="street" th:field="*{street}">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" th:field="*{city}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="postCode" class="form-label">Post Code</label>
+                                <input type="text" class="form-control" id="postCode" th:field="*{postCode}">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">
+                            Create Account
+                        </button>
+
+                        <div class="text-center mt-4">
+                            <p class="mb-0 text-muted">
+                                Already have an account?
+                                <a th:href="@{/login}" class="link-primary fw-medium">Log in here</a>
+                            </p>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+            crossorigin="anonymous"></script>
+</body>
+</html>

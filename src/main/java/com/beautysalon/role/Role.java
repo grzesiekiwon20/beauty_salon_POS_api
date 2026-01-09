@@ -10,18 +10,22 @@ import lombok.Setter;
 import java.util.HashSet;
 import java.util.Set;
 
+
 @Table(name = "roles")
 @Entity
-@AllArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String name;
+
     @ManyToMany(mappedBy = "roles")
     private Set<UserEntity> users = new HashSet<>();
+
 }
