@@ -20,7 +20,7 @@ public class CategoryController {
     public String addNewCategory(Model model){
         CategoryRequest categoryRequest = new CategoryRequest();
         model.addAttribute("category", categoryRequest);
-        return "categorymng";
+        return "/category/categorymng";
     }
 
     @PostMapping("/save")
@@ -38,11 +38,5 @@ public class CategoryController {
         model.addAttribute("categoryId" , service.findCategoryResponseById(categoryId));
         return "main";
     }
-//    @GetMapping("/bySubCategory/{subCategory}")
-//    public String getCategoriesBySubcategory(
-//            @PathVariable SubCategory subCategory, Model model
-//    ){
-//        model.addAttribute("categoriesBySubCategory");
-//        return
-//    }
+
 }
