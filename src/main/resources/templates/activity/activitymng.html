@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{main.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Activity management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+
+<div layout:fragment="create_activity_layout" class="mt-5">
+    <div class="container bg-danger-subtle">
+        <div class="row gy-4 gy-md-0"> <!-- Adds vertical gap on small screens -->
+
+            <!-- Service Details Column (shown only if serviceDetails exists) -->
+            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 p-4 p-md-5" th:if="${serviceDetails != null}">
+                <div class="h-100 d-flex flex-column border rounded shadow-sm bg-light">
+                    <div class="text-center p-3">
+                        <h4 th:text="${serviceDetails.name()}"></h4>
+                    </div>
+
+                    <div class="card border-0 flex-grow-1 mx-3 mb-3">
+                        <img class="card-img-top img-fluid"
+                             th:src="@{'data:image/jpeg;base64,' + ${serviceDetails.imageBase64()}}"
+                             alt="Service image">
+                        <div class="card-body text-center align-content-center row">
+                            <h4 class="card-text col" th:text="${serviceDetails.description()}"></h4>
+                            <h4 class="col " th:text="'€ ' + ${serviceDetails.price()}"></h4>
+                        </div>
+                        <p class="text-center" th:text="'Duration: ' + ${serviceDetails.duration()} + ' h'"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 p-4 p-md-5">
+                <form
+                        th:action="@{/activities/save}"
+                        th:object="${activity}"
+                        method="POST">
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date:</label>
+                        <input id="date" type="date" th:field="*{date}"
+                               class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="startTime" class="form-label">Start Time:</label>
+                        <input id="startTime" type="time" th:field="*{startTime}"
+                               class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="hidden" name="serviceId" th:field="*{serviceEntityId}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="employee" class="form-label">Stylist:</label>
+                        <select class="form-select" id="employee" th:field="*{employeeId}">
+                            <option th:each="employee : ${employeeList}"
+                                    th:value="${employee.userId()}"
+                                    th:text="${employee.fullName()}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-info w-100">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

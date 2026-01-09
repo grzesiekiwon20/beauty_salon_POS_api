@@ -1,87 +1,59 @@
 package com.beautysalon.activity;
 
 import com.beautysalon.activity.dto.ActivityRequest;
-import com.beautysalon.activity.dto.ActivityResponse;
-import com.beautysalon.activity.dto.DaysResponse;
-import com.beautysalon.exception.BookingException;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.beautysalon.serviceentity.ServiceEntityServiceImpl;
+import com.beautysalon.user.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
 
 
-@RestController
-@Tag(name = "Activity", description = "The Activity Api")
+@Controller
 @RequestMapping("activities")
+@RequiredArgsConstructor
 public class ActivityController {
 
-    private final ActivityService service;
+    private final ActivityServiceImpl activityService;
+    private final UserServiceImpl userServiceImpl;
+    private final ServiceEntityServiceImpl serviceEntityService;
 
-    public ActivityController(ActivityService service) {
-        this.service = service;
+
+    @GetMapping("/addNew")
+    public String createActivity(Model model, @RequestParam(required = false) Long serviceId) {
+        ActivityRequest activityRequest = new ActivityRequest();
+        activityRequest.setServiceEntityId(serviceId);
+        final String roleName = "EMPLOYEE";
+        activityRequest.setServiceEntityId(serviceId);
+        model.addAttribute("activity", activityRequest);
+        model.addAttribute("employeeList" , userServiceImpl.getUsersByRole(roleName));
+        model.addAttribute("servicesList", serviceEntityService.findAllServices());
+        model.addAttribute("serviceDetails" ,serviceEntityService.findById(serviceId));
+        return "/activity/activitymng";
     }
 
-
-    @PostMapping("/create/usr")
-    public ResponseEntity<Long> saveActivityByUser(
-            @Valid @RequestBody ActivityRequest activityRequest,
-            Authentication connectedUser
+    @PostMapping("/save")
+    public String saveActivity(
+            @ModelAttribute("activity") ActivityRequest activityRequest, Authentication authentication
     ) {
-        return ResponseEntity.ok(service.saveActivityWithConnectedUser(activityRequest, connectedUser));
+        activityService.saveActivity(activityRequest, authentication);
+
+        return "redirect:/";
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<ActivityResponse>> getAllActivities() {
-        return ResponseEntity.ok(service.findAllActivities());
-    }
 
-    @GetMapping("/connectedUser")
-    public ResponseEntity<List<ActivityResponse>> getActivitiesByConnectedUserId(
-            Authentication connectedUser
+    @GetMapping("/dates")
+    public String getAvailableTimesForEmployee(
+            Model model,
+            @RequestParam LocalDate date,
+            @RequestParam String employeeId
     ) {
-        return ResponseEntity.ok(service.findActivitiesByUserId(connectedUser));
+        model.addAttribute("dates", activityService.findActivitiesForEmployeeIdAndDate(employeeId, date));
+
+        return "/activity/activitymng";
     }
 
-    @GetMapping("/{activityId}")
-    public ResponseEntity<ActivityResponse> getActivityById(
-            @PathVariable Long activityId
-    ) {
-        return ResponseEntity.ok(service.findById(activityId));
-    }
-
-    @GetMapping("/availableTimeSet/{date}")
-    public ResponseEntity<List<LocalTime>> getAvailableTimesForEmployee(
-            @PathVariable LocalDate date,
-            @RequestParam Long id
-    ) {
-        return ResponseEntity.ok(service.findAvailableTimesForEmployee(id, date));
-    }
-
-    @GetMapping("/{employeeId}/{date}")
-    public ResponseEntity<List<ActivityResponse>> getListOfActivitiesByEmployeeIdAndDate(
-            @PathVariable Long employeeId,
-            @PathVariable LocalDate date
-    ){
-        return ResponseEntity.ok(service.findActivityListForEmployee(employeeId, date));
-    }
-
-    @GetMapping("/daysToGo")
-    public ResponseEntity<DaysResponse> getDaysToGo(Authentication authentication) {
-        try {
-            DaysResponse response = service.findNumberOfDays(authentication);
-            return ResponseEntity.ok(response);
-        } catch (BookingException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new DaysResponse(false, e.getMessage(), null));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new DaysResponse(false, "An unexpected error occurred", null));
-        }
-    }
 }
