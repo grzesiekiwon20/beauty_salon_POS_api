@@ -38,12 +38,11 @@ public class ActivityServiceImpl implements ActivityService {
         List<Activity> employeActivityList = employee.getActivities();
         employeActivityList.add(saved);
         employee.setActivities(employeActivityList);
-        UserEntity savedEmployee = userRepository.save(employee);
+        userRepository.save(employee);
         List<Activity> customerActivityList = customer.getActivities();
         customerActivityList.add(saved);
         customer.setActivities(customerActivityList);
-        UserEntity savedCustomer = userRepository.save(customer);
-
+        userRepository.save(customer);
     }
 
 
