@@ -6,7 +6,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 
 @ExtendWith(MockitoExtension.class)
-public class ActivityServiceEntityProductTest {
+public class ActivityServiceImplUnitTest {
 
 
 

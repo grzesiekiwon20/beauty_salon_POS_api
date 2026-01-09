@@ -18,4 +18,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
                     """
     )
     List<Category> findBySubcategory(@Param("subCategory") SubCategory subCategory);
+
+    Boolean existsByName(String name);
 }

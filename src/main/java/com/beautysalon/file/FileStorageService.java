@@ -24,18 +24,12 @@ public class FileStorageService {
         this.fileUploadPath = fileUploadPath;
     }
 
-    public String saveFile(
-            @Nonnull MultipartFile sourceFile,
-            @Nonnull Long typeId
-    ) {
+    public String saveFile(@Nonnull MultipartFile sourceFile, @Nonnull Long typeId) {
         final String fileUploadSubPath = "types" + separator + typeId;
         return uploadFile(sourceFile, fileUploadSubPath);
     }
 
-    private String uploadFile(
-            @Nonnull MultipartFile sourceFile,
-            @Nonnull String fileUploadSubPath
-    ) {
+    private String uploadFile(@Nonnull MultipartFile sourceFile, @Nonnull String fileUploadSubPath) {
         final String finalUploadPath = fileUploadPath + separator + fileUploadSubPath;
         File targetFolder = new File(finalUploadPath);
 
@@ -47,7 +41,8 @@ public class FileStorageService {
         }
         final String fileExtension = getFileExtension(sourceFile.getOriginalFilename());
         String targetFilePath = finalUploadPath + separator + currentTimeMillis() + "." + fileExtension;
-        Path targetPath = Paths.get(targetFilePath);
+        Path targetPath;
+        targetPath = Paths.get(targetFilePath);
         try {
             Files.write(targetPath, sourceFile.getBytes());
             return targetFilePath;

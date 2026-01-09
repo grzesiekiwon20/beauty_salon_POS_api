@@ -3,17 +3,18 @@ package com.beautysalon.category.dto;
 
 import com.beautysalon.category.SubCategory;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import org.springframework.lang.NonNull;
+import lombok.*;
 
 
 @Builder
-public record CategoryRequest(
-        Long id,
-        @Size(min = 5, max = 35)
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+public class CategoryRequest {
+
         @NonNull
-        String name,
+        @Size(min = 5, max = 35, message = "Name can not be shorter than 3 and longer than 35 characters")
+        private String name;
         @NonNull
-        SubCategory subCategory
-) {
+        private SubCategory subCategory;
 }

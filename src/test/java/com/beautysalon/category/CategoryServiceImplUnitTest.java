@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class CategoryServiceImplTest {
+public class CategoryServiceImplUnitTest {
 
     @InjectMocks
     private CategoryServiceImpl categoryService;
@@ -99,7 +99,7 @@ public class CategoryServiceImplTest {
             final String existingName = "Eyelashes";
             when(categoryRepository.existsByName(existingName)).thenReturn(true);
 
-            CategoryRequest categoryRequest = new CategoryRequest(1L, existingName, SubCategory.Services);
+            CategoryRequest categoryRequest = new CategoryRequest(existingName, SubCategory.Services);
             CategoryNameAlreadyExistException exception = assertThrows(
                     CategoryNameAlreadyExistException.class,
                     () -> categoryService.save(categoryRequest)
@@ -114,7 +114,7 @@ public class CategoryServiceImplTest {
         void verifiesIfExceptionIsThrownWhenCategoryRequestWithGivenNameTooLong() {
             final String existingName = "Eyelashes";
 
-            CategoryRequest categoryRequest = new CategoryRequest(1L, existingName, SubCategory.Services);
+            CategoryRequest categoryRequest = new CategoryRequest( existingName, SubCategory.Services);
             Set<ConstraintViolation<CategoryRequest>> violationSet = validator.validate(categoryRequest);
 
             assertThat(violationSet).isEmpty();
@@ -125,7 +125,7 @@ public class CategoryServiceImplTest {
         void VerifiesIfValidationWorksProperlyWhenCategoryRequestWithGivenNameIsTooLong() {
             final String existingName = "Eyelashesssssssssssssssssssssssssssssss";
 
-            CategoryRequest categoryRequest = new CategoryRequest(1L, existingName, SubCategory.Services);
+            CategoryRequest categoryRequest = new CategoryRequest( existingName, SubCategory.Services);
             Set<ConstraintViolation<CategoryRequest>> violationSet = validator.validate(categoryRequest);
 
             assertThat(violationSet).isNotEmpty();
@@ -136,7 +136,7 @@ public class CategoryServiceImplTest {
         void verifiesIfValidationWorksProperlyWhenCategoryRequestWithGivenNameIsTooShort() {
             final String existingName = "Eyel";
 
-            CategoryRequest categoryRequest = new CategoryRequest(1L, existingName, SubCategory.Services);
+            CategoryRequest categoryRequest = new CategoryRequest( existingName, SubCategory.Services);
             Set<ConstraintViolation<CategoryRequest>> violationSet = validator.validate(categoryRequest);
             assertThat(violationSet).isNotEmpty();
         }
