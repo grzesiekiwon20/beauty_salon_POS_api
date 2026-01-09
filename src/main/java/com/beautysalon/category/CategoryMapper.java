@@ -2,7 +2,10 @@ package com.beautysalon.category;
 
 import com.beautysalon.category.dto.CategoryRequest;
 import com.beautysalon.category.dto.CategoryResponse;
+import com.beautysalon.common.BaseEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 
 
 @Component
@@ -18,8 +21,8 @@ public class CategoryMapper {
     }
     public Category mapCategory(CategoryRequest categoryRequest){
         return Category.builder()
-                .name(categoryRequest.name())
-                .subCategory(categoryRequest.subCategory())
+                .name(categoryRequest.getName())
+                .subCategory(categoryRequest.getSubCategory())
                 .build();
     }
 }

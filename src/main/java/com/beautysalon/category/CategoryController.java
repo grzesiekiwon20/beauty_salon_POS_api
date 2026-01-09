@@ -2,15 +2,11 @@ package com.beautysalon.category;
 
 
 import com.beautysalon.category.dto.CategoryRequest;
-import com.beautysalon.category.dto.CategoryResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@Tag(name = "Category", description = "The Category Api")
+@Controller
 @RequestMapping("categories")
 public class CategoryController {
 
@@ -20,29 +16,33 @@ public class CategoryController {
         this.service = service;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Long> createCategory(
-            @RequestBody CategoryRequest categoryRequest
-    ){
-        return ResponseEntity.ok(service.save(categoryRequest));
+    @GetMapping("/addNew")
+    public String addNewCategory(Model model){
+        CategoryRequest categoryRequest = new CategoryRequest();
+        model.addAttribute("category", categoryRequest);
+        return "categorymng";
     }
 
-    @GetMapping("/public/")
-    public ResponseEntity<List<CategoryResponse>> getAllCategories(){
-        return ResponseEntity.ok(service.getAllCategories());
-    }
-    @GetMapping("/public/subCategory")
-    public ResponseEntity<List<CategoryResponse>> getCategoriesBySubcategory(
-            @RequestParam SubCategory subCategory
-    ){
-        return ResponseEntity.ok(service.findCategoriesBySubcategory(subCategory));
+    @PostMapping("/save")
+    public String saveCategory(@ModelAttribute("category") CategoryRequest categoryRequest){
+        service.save(categoryRequest);
+        return "redirect:/";
     }
 
-    @GetMapping("/public/{categoryId}")
-    public ResponseEntity<CategoryResponse> getCategoriesById(
-            @PathVariable Long categoryId
-    ){
-        return ResponseEntity.ok(service.findCategoriesById(categoryId));
-    }
 
+    @GetMapping("/{categoryId}")
+    public String getCategoriesByCategoryId(
+            @PathVariable Long categoryId,
+            Model model
+    ){
+        model.addAttribute("categoryId" , service.findCategoryResponseById(categoryId));
+        return "main";
+    }
+//    @GetMapping("/bySubCategory/{subCategory}")
+//    public String getCategoriesBySubcategory(
+//            @PathVariable SubCategory subCategory, Model model
+//    ){
+//        model.addAttribute("categoriesBySubCategory");
+//        return
+//    }
 }
