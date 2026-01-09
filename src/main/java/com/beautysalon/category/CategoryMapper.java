@@ -2,15 +2,11 @@ package com.beautysalon.category;
 
 import com.beautysalon.category.dto.CategoryRequest;
 import com.beautysalon.category.dto.CategoryResponse;
-import com.beautysalon.common.BaseEntity;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
 
 
 @Component
 public class CategoryMapper {
-
 
     public CategoryResponse mapCategoryResponse(Category category){
         return CategoryResponse.builder()
