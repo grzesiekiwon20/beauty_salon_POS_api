@@ -2,41 +2,45 @@ package com.beautysalon.address;
 
 
 import com.beautysalon.address.dto.AddressRequest;
-import com.beautysalon.address.dto.AddressResponse;
 import com.beautysalon.common.MessageResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
-@Tag(name = "Address", description = "The Address Api")
-@RestController
+@Controller
 @RequestMapping("address")
+@RequiredArgsConstructor
 public class AddressController {
 
     private final AddressServiceImpl service;
 
-    public AddressController(AddressServiceImpl service) {
-        this.service = service;
-    }
-
-    @PostMapping("/addAddress")
-    public ResponseEntity<MessageResponse> addAddress(
-            @Valid @RequestBody AddressRequest request,
-            Authentication connectedUser
+    @GetMapping("/addAddress")
+    public String create(
+            Model model
     ){
-        return ResponseEntity.ok(service.saveAddress(request, connectedUser));
+        AddressRequest addressRequest = new AddressRequest();
+        model.addAttribute("address", addressRequest);
+        return "/address/addressmng";
     }
-
-    @GetMapping("/username")
-    public ResponseEntity<List<AddressResponse>> getAddressesResponseForConnectedUser(
-            Authentication connectedUser
+    @PostMapping("/save")
+    public String saveAddress(
+            Authentication authentication,
+            @ModelAttribute("address") AddressRequest addressRequest
     ){
-        return ResponseEntity.ok(service.getAddressResponsesListFromRepositoryForConnectedUser(connectedUser));
+        service.saveAddress(addressRequest, authentication);
+        return "redirect:/address/";
+    }
+    @GetMapping("/")
+    public String getAddressesResponseForConnectedUser(
+            Authentication connectedUser, Model model
+    ){
+        model.addAttribute("addressList" ,service.getAddressResponsesListFromRepositoryForConnectedUser(connectedUser));
+        return "/address/address_book";
     }
 
     @PutMapping("/update-address/{addressId}")
@@ -49,11 +53,13 @@ public class AddressController {
     ){
          return ResponseEntity.ok(service.updateExistingAddress(addressId, firstLineAddress,secondLineAddress,city,postCode));
     }
-    @GetMapping("/private/{addressId}")
-    public ResponseEntity<AddressResponse> getAddressResponseById(
+
+    @GetMapping("/byId/{addressId}")
+    public String getAddressResponseById(Model model,
             @PathVariable Long addressId
     ){
-        return ResponseEntity.ok(service.findAddressResponseById(addressId));
+        model.addAttribute("address", service.getAddressResponseByAddressId(addressId));
+        return "/address/address_details";
     }
 
     @DeleteMapping("/remove/{addressId}")

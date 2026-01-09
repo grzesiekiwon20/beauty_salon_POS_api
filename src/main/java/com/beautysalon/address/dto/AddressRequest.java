@@ -5,27 +5,27 @@ import com.beautysalon.address.AddressType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.NonNull;
+import lombok.*;
 
 
 @Builder
-public record AddressRequest(
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+public class AddressRequest {
 
-        @NonNull
-        @Size(min = 2, message = "Street name has to ba at least 2 characters long")
-        @NotEmpty
-        String firstLineAddress,
-        String secondLineAddress,
-        @NonNull
-        @Size(min= 3, message = "City has to be at least 3 characters long")
-        String city,
-        @NotEmpty
-        @NonNull
-        @Pattern(regexp = "^[A-Za-z0-9\\-]{2,10}$")
-        String postCode,
+    @NonNull
+    @Size(min = 2, message = "Street name has to ba at least 2 characters long")
+    @NotEmpty
+    private String street;
+    @NonNull
+    @Size(min = 3, message = "City has to be at least 3 characters long")
+    private String city;
+    @NotEmpty
+    @NonNull
+    @Pattern(regexp = "^[A-Za-z0-9\\-]{2,10}$")
+    private String postCode;
 
-        @NonNull
-        AddressType addressType
-        ) {
+    @NonNull
+    private AddressType addressType;
 }

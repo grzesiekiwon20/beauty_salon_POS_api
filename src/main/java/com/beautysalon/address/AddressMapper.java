@@ -16,19 +16,17 @@ public class AddressMapper {
     public Address map(AddressRequest request) {
 
         return Address.builder()
-                .firstLineAddress(request.firstLineAddress())
-                .secondLineAddress(request.secondLineAddress())
-                .city(request.city())
-                .postCode(request.postCode())
-                .addressType(request.addressType())
+                .street(request.getStreet())
+                .city(request.getCity())
+                .postCode(request.getPostCode())
+                .addressType(request.getAddressType())
                 .build();
     }
 
     public AddressResponse map(Address address) {
         return AddressResponse.builder()
                 .id(address.getId())
-                .firstLineAddress(address.getFirstLineAddress())
-                .secondLineAddress(address.getSecondLineAddress())
+                .street(address.getStreet())
                 .city(address.getCity())
                 .postCode(address.getPostCode())
                 .addressType(address.getAddressType())

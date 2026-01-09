@@ -6,6 +6,7 @@ import com.beautysalon.address.dto.AddressResponse;
 import com.beautysalon.common.MessageResponse;
 import com.beautysalon.user.UserEntity;
 import com.beautysalon.user.UserRepository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class AddressServiceImpl implements AddressService {
         if(addressRepository.getAddressesByUsername(user.getUsername())!= null) {
             final List<Address> addressList = addressRepository.getAddressesByUsername(user.getUsername());
             for (Address existingAddress : addressList) {
-                if (Objects.equals(existingAddress.getAddressType(), request.addressType())) {
+                if (Objects.equals(existingAddress.getAddressType(), request.getAddressType())) {
                     return new MessageResponse("You cannot have more than one address with the same type. You can edit existing or remove and add another one.");
                 }
             }
@@ -55,14 +56,19 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    public AddressResponse findUsersHomeAddress(Authentication authentication) {
+        final List<Address> addressList = addressRepository.getAddressesByUsername(authentication.getName());
+        final AddressType addressType = AddressType.HOME;
+        return addressList.stream().map(mapper::map).filter(addressResponse ->
+                Objects.equals(addressResponse.addressType(), addressType)).findFirst().get();
+    }
+
+    @Override
     public MessageResponse updateExistingAddress(Long addressId, String firstLineAddress, String secondLineAddress, String city, String postcode) {
         Address address = addressRepository.findById(addressId).orElseThrow(
                 ()-> new EntityNotFoundException("No address found with id: "+ addressId));
         if(firstLineAddress != null){
-            address.setFirstLineAddress(firstLineAddress);
-        }
-        if(secondLineAddress!= null){
-            address.setSecondLineAddress(secondLineAddress);
+            address.setStreet(firstLineAddress);
         }
         if(city!= null){
             address.setCity(city);

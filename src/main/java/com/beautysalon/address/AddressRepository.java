@@ -1,6 +1,7 @@
 package com.beautysalon.address;
 
 
+import com.beautysalon.address.dto.AddressResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +14,12 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
 
 
     @Query(value = """
-    select a from Address a join  a.users u where u.username=:username
-""")
+                select a from Address a join  a.users u where u.username=:username
+            """)
     List<Address> getAddressesByUsername(String username);
+
+    @Query("""
+            select a from Address a where a.addressType=:addressType
+            """)
+    AddressResponse findAddressByAddressType(@Param("addressType") AddressType addressType);
 }
