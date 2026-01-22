@@ -19,6 +19,7 @@ public class AddressMapper {
                 .street(request.getStreet())
                 .city(request.getCity())
                 .postCode(request.getPostCode())
+                .country(request.getCountry())
                 .addressType(request.getAddressType())
                 .build();
     }
@@ -29,6 +30,7 @@ public class AddressMapper {
                 .street(address.getStreet())
                 .city(address.getCity())
                 .postCode(address.getPostCode())
+                .country(address.getCountry())
                 .addressType(address.getAddressType())
                 .userEntitySet(address.getUsers().stream().map(UserEntity::getUserId).collect(Collectors.toSet()))
                 .build();

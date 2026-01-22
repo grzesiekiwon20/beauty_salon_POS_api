@@ -3,6 +3,7 @@ package com.beautysalon;
 
 import com.beautysalon.activity.ActivityMapper;
 import com.beautysalon.activity.ActivityRepository;
+import com.beautysalon.cart.CartItemRepository;
 import com.beautysalon.cart.CartService;
 import com.beautysalon.role.Role;
 import com.beautysalon.role.RoleRepository;
@@ -22,23 +23,15 @@ public class Application {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(RoleRepository roleRepository, UserRepository userRepository, ActivityRepository activityRepository, ActivityMapper activityMapper, CartService cartService) {
+    CommandLineRunner commandLineRunner(RoleRepository roleRepository, UserRepository userRepository, ActivityRepository activityRepository, CartItemRepository cartItemRepository, ActivityMapper activityMapper, CartService cartService) {
         return args -> {
-            if (roleRepository.findByName("ADMIN").isEmpty()) {
+            if (roleRepository.findByName("USER").isEmpty()) {
                 Role userRole = new Role();
-                userRole.setName("ADMIN");
+                userRole.setName("USER");
                 roleRepository.save(userRole);
             }
-//            UserEntity userEntity = userRepository.findByUsername("gabriela10");
-//            Role role = roleRepository.findByName("EMPLOYEE").orElseThrow();
-//
-//            Set<Role> roleSet = userEntity.getRoles();
-//            roleSet.add(role);
-//            userEntity.setRoles(roleSet);
-//            userRepository.save(userEntity);
-
-
         };
+
     }
 
 }

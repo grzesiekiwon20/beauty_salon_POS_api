@@ -23,14 +23,14 @@
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-body p-0">
-                    <div th:if="${#sets.isEmpty(cartItems)}" class="p-5 text-center">
+                    <div th:if="${#lists.isEmpty(cart)}" class="p-5 text-center">
                         <p class="text-muted">Your cart is empty.</p>
                         <a th:href="@{/products/all}" class="btn btn-primary">Continue Shopping</a>
                     </div>
 
-                    <table class="table table-hover align-middle mb-0" th:unless="${#sets.isEmpty(cartItems)}">
+                    <table class="table table-hover align-middle mb-0" th:unless="${#lists.isEmpty(cart)}">
                         <tbody>
-                        <tr th:each="item : ${cartItems}">
+                        <tr th:each="item : ${cart}">
                             <td class="text-center" style="width: 120px;">
                                 <img th:if="${item.getProduct().getImage() != null and item.getProduct().getImage().length > 0}"
                                         th:src="@{'data:image/jpeg;base64,' + ${item.getProduct().imageBase64()}}"
@@ -56,12 +56,12 @@
                                 </form>
                             </td>
                             <td class="text-center">
-                                <span th:text="'€' + ${item.getSubTotal()}"></span>
+                                <span th:text="'€' + ${item.getSubtotal()}"></span>
                             </td>
                             <td class="text-center">
                                 <form th:action="@{/cart/remove}" method="post" class="d-inline">
-                                    <input type="hidden" name="productId" th:value="${item.product.id}"/>
-                                    <button type="submit" class="btn btn-sm btn-danger">
+                                    <input type="hidden" name="productId" th:value="${item.product.getId()}"/>
+                                    <button id="removeBtn" type="submit" class="btn btn-sm btn-danger">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </form>
@@ -74,7 +74,7 @@
 
             <div class="d-flex justify-content-between">
                 <a th:href="@{/products/all}" class="btn btn-outline-secondary">Continue Shopping</a>
-                <a th:href="@{/cart/clear}" class="btn btn-outline-danger" th:unless="${#sets.isEmpty(cartItems)}">Clear Cart</a>
+                <a th:href="@{/cart/clear}" class="btn btn-outline-danger" th:unless="${#lists.isEmpty(cart)}">Clear Cart</a>
             </div>
         </div>
 
@@ -87,7 +87,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-2">
                         <span>Subtotal</span>
-                        <span th:text="'€' +${cart.getTotal()}"></span>
+<!--                        <span th:text="'€' +${cart.getTotal()}"></span>-->
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                         <span>Shipping</span>
@@ -100,7 +100,7 @@
                     <hr>
                     <div class="d-flex justify-content-between mb-4">
                         <strong>Total</strong>
-<!--                        <strong th:text="${#numbers.formatCurrency(cart.total)}">$131.96</strong>-->
+                        <strong th:text="${total}"></strong>
                     </div>
 
                     <!-- Promo Code (Optional) -->
@@ -111,7 +111,7 @@
                         </div>
                     </form>
 
-                    <a th:href="@{/checkout}" class="btn btn-primary w-100" th:unless="${#sets.isEmpty(cartItems)}">
+                    <a th:href="@{/checkout}" class="btn btn-primary w-100" th:unless="${#lists.isEmpty(cart)}">
                         Proceed to Checkout
                     </a>
                 </div>

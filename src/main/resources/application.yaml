@@ -1,36 +1,27 @@
 spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:9090/realms/salon-app
+  redis:
+    port: 6379
+  devtools:
+    livereload:
+      enabled: true
   datasource:
-    keycloak:
-      name: keycloak_v1
-      username: postgres
-      password: root
-      url: jdbc:postgresql://localhost:5436/keycloak_v1
-      driver-class-name: org.postgresql.Driver
-    postgres:
-      name: postgres
-      username: postgres
-      password: root
-      url: jdbc:postgresql://localhost:5436/postgres
-      driver-class-name: org.postgresql.Driver
+    driver-class-name: org.postgresql.Driver
+    name: database
+    url: jdbc:postgresql://localhost:5432/database
+    username: database_user
+    password: password
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
-  keycloak:
-    client-id: back-end
-    client-secret: NGIx7DPxYHLGmR1sAJMjP7oLMOlsbG4a
-    realm: salon-app
-    server-url: http://localhost:9090/
-
+  servlet:
+    multipart:
+      max-file-size: 3MB
 server:
   port: 8080
   servlet:
-    context-path: /api/
+    context-path: /api
+    session:
+      timeout: 30m
 
 application:
   file:
@@ -39,3 +30,6 @@ application:
 logging:
   level:
     web: debug
+    org:
+      springframework:
+        security: debug

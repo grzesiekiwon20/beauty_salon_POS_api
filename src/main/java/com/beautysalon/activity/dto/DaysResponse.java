@@ -1,5 +1,6 @@
 package com.beautysalon.activity.dto;
 
+
 public class DaysResponse {
     private boolean success;
     private String message;

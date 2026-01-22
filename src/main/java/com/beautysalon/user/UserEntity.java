@@ -3,13 +3,9 @@ package com.beautysalon.user;
 
 import com.beautysalon.activity.Activity;
 import com.beautysalon.address.Address;
-import com.beautysalon.common.BaseEntity;
 import com.beautysalon.role.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -70,6 +65,7 @@ public class UserEntity implements UserDetails {
     )
     @JsonIgnore
     private List<Activity> activities;
+
 
     @Override
     @NonNull

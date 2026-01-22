@@ -11,6 +11,7 @@ public record AddressResponse(
         String street,
         String city,
         String postCode,
+        String country,
         AddressType addressType,
         Set<String> userEntitySet
 ){}

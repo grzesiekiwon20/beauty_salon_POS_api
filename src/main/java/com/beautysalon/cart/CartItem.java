@@ -1,12 +1,18 @@
 package com.beautysalon.cart;
 
 
+import com.beautysalon.common.BaseEntity;
 import com.beautysalon.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
 
 
 @Entity
@@ -16,23 +22,24 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 @Getter
 @Builder
-class CartItem  {
+public class CartItem extends BaseEntity{
 
-
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    @ManyToOne
-    @JsonIgnore
-    private Cart cart;
+    @Serial
+    private static final long serialVersionUID = 4046409674630971997L;
 
     @ManyToOne
     private Product product;
 
-    @Min(1)
     private Integer quantity;
 
-    private double subTotal;
+    private String username;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal unitPrice;
+
+    @Transient
+    public BigDecimal getSubtotal() {
+        return unitPrice.multiply(BigDecimal.valueOf(quantity));
+    }
 
 }

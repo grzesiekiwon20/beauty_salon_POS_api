@@ -45,7 +45,7 @@ public class CategoryServiceImplUnitTest {
         final Long id = 1L;
         final SubCategory subCategory = SubCategory.Services;
         this.testCategory = Category.builder()
-                .id(id).name(categoryName).subCategory(subCategory)
+                .name(categoryName).subCategory(subCategory)
                 .build();
         this.testCategoryRequest = CategoryRequest.builder()
                 .name(categoryName).subCategory(subCategory)
@@ -205,7 +205,6 @@ public class CategoryServiceImplUnitTest {
         void verifiesIfListOfCategoryResponsesIsReturnedProperly() {
             final Category category1 = testCategory;
             final Category category2 = Category.builder()
-                    .id(2L)
                     .name("Other")
                     .subCategory(SubCategory.Services)
                     .build();
@@ -239,7 +238,6 @@ public class CategoryServiceImplUnitTest {
 
             Category category1 = testCategory; // e.g., Services
             Category category2 = Category.builder()
-                    .id(2L)
                     .name("Other")
                     .subCategory(SubCategory.Services)
                     .build();
@@ -282,12 +280,10 @@ public class CategoryServiceImplUnitTest {
             Category matchingCategory = testCategory; // Services
             // Non-matching ones (just for context, not returned)
             Category coursesCategory = Category.builder()
-                    .id(2L)
                     .name("Other")
                     .subCategory(SubCategory.Courses)
                     .build();
             Category shopCategory = Category.builder()
-                    .id(3L)
                     .name("Nails")
                     .subCategory(SubCategory.Shop)
                     .build();

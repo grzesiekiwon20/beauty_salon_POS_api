@@ -1,6 +1,8 @@
 package com.beautysalon.serviceentity;
 
 
+import com.beautysalon.category.CategoryServiceImpl;
+import com.beautysalon.category.SubCategory;
 import com.beautysalon.product.dto.ProductResponse;
 import com.beautysalon.serviceentity.dto.ServiceEntityRequest;
 import com.beautysalon.serviceentity.dto.ServiceEntityResponse;
@@ -23,6 +25,7 @@ import java.util.List;
 public class ServiceEntityController {
 
     private final ServiceEntityServiceImpl serviceEntityServiceImpl;
+    private final CategoryServiceImpl categoryService;
 
 
     @GetMapping("/addNew")
@@ -30,6 +33,7 @@ public class ServiceEntityController {
     ) {
         ServiceEntityRequest serviceEntityRequest = new ServiceEntityRequest();
         model.addAttribute("serviceEntity", serviceEntityRequest);
+        model.addAttribute("categories", categoryService.findCategoriesBySubcategory(SubCategory.Services));
         return "/services/servicesmng";
     }
     @PostMapping("/save")
@@ -81,4 +85,13 @@ public class ServiceEntityController {
 
         return new ResponseEntity<>(serviceEntityResponse.image(), headers, HttpStatus.OK);
     }
+
+    @GetMapping("/manageServices")
+    public String servicesManagement(
+            Model model
+    ){
+        model.addAttribute("servicesList", serviceEntityServiceImpl.findAllServices());
+        return "/services/services_list_admin";
+    }
+
 }

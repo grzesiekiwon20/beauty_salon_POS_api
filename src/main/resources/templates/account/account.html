@@ -38,7 +38,7 @@
                                     <li><a class="dropdown-item" href="#">Action</a></li>
                                     <li><a class="dropdown-item" th:href="@{/products/addNew}">Products Management</a>
                                     </li>
-                                    <li><a class="dropdown-item" th:href="@{/services/addNew}">Services Management</a>
+                                    <li><a class="dropdown-item" th:href="@{/services/manageServices}">Services Management</a>
                                     </li>
                                     <li>
                                         <hr class="dropdown-divider">
@@ -59,13 +59,13 @@
                 </div>
             </nav>
 
-            <!-- Main Content Area (offset by sidebar width) -->
             <div class="col-12  d-flex justify-content-center bg-light">
                 <section class="account_content" layout:fragment="user_details"></section>
-                <section class="employee_list" layout:fragment="emmploye_list"></section>
+                <section class="employee_list" layout:fragment="employee_list"></section>
                 <section class="productmng" layout:fragment="product_management_layout"></section>
                 <section layout:fragment="service_entity_management_layout"></section>
                 <section layout:fragment="address_book"></section>
+                <section layout:fragment="services_list_admin_layout"></section>
             </div>
         </div>
     </div>

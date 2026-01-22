@@ -26,6 +26,8 @@ public class AddressRequest {
     @Pattern(regexp = "^[A-Za-z0-9\\-]{2,10}$")
     private String postCode;
 
+    private String country;
+
     @NonNull
     private AddressType addressType;
 }

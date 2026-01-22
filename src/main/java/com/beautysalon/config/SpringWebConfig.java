@@ -1,6 +1,6 @@
 package com.beautysalon.config;
 
-import com.beautysalon.webmvc.CartFormatter;
+//import com.beautysalon.webmvc.CartFormatter;
 import com.beautysalon.webmvc.CategoryFormatter;
 import com.beautysalon.webmvc.ProductFormatter;
 import com.beautysalon.webmvc.ServiceEntityFormater;
@@ -51,7 +51,7 @@ public class SpringWebConfig implements ApplicationContextAware, WebMvcConfigure
         registry.addFormatter(productFormatter());
         registry.addFormatter(serviceEntityFormater());
         registry.addFormatter(dateFormatter());
-        registry.addFormatter(cartFormater());
+//        registry.addFormatter(cartFormater());
     }
 
     @Bean
@@ -73,10 +73,10 @@ public class SpringWebConfig implements ApplicationContextAware, WebMvcConfigure
     public ServiceEntityFormater serviceEntityFormater() {
         return new ServiceEntityFormater();
     }
-    @Bean
-    public CartFormatter cartFormater() {
-        return new CartFormatter();
-    }
+//    @Bean
+//    public CartFormatter cartFormater() {
+//        return new CartFormatter();
+//    }
 
     @Bean
     public SpringResourceTemplateResolver templateResolver() {

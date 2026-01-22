@@ -7,49 +7,78 @@
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
-<div layout:fragment="service_entity_management_layout">
-    <form action="#"
-          th:action="@{/services/save}"
-          th:object="${serviceEntity}"
-          enctype="multipart/form-data"
-          method="POST">
-        <label for="name">Name: </label>
-        <input id="name" type="text" th:field="*{name}" placeholder="Product name"
-               class="form-control mb-4 col-4">
-        <label for="desc">Description: </label>
-        <input id="desc" type="text"
-               th:field="*{description}" placeholder="Description"
-               class="form-control mb-4 col-4">
+<div layout:fragment="service_entity_management_layout" >
+   <div class="bg-white container rounded-2 m-5">
+       <!--/*@thymesVar id="servicesCategories" type="com.beautysalon.webmvc.GlobalModelAdvice"*/-->
+       <div th:unless="${#lists.isEmpty(servicesCategories)}">
+           <form action="#"
+                 th:action="@{/services/save}"
+                 th:object="${serviceEntity}"
+                 enctype="multipart/form-data"
+                 method="POST">
+               <label for="name">Name: </label>
+               <input id="name" type="text" th:field="*{name}" placeholder="Product name"
+                      class="form-control mb-4 col-12">
+               <label for="desc">Description: </label>
+               <input id="desc" type="text"
+                      th:field="*{description}" placeholder="Description"
+                      class="form-control mb-4 col-4">
 
-        <label for="category">Category: </label>
-        <select class="form-control mb-4 col-4" id="category" type="number" th:field="*{category}">
-                <!--/*@thymesVar id="servicesCategories" type="com.beautysalon.webmvc.GlobalModelAdvice"*/-->
-                <option
-                        th:each="categoryResponse: ${servicesCategories}"
-                        th:value="${categoryResponse.categoryId()}"
-                        th:text="${categoryResponse.name()}"
-                ></option>
-        </select>
+               <label for="category">Category: </label>
+               <select class="form-control mb-4 col-4" id="category" th:field="*{category}" type="number">
+                   <!--/*@thymesVar id="servicesCategories" type="com.beautysalon.webmvc.GlobalModelAdvice"*/-->
+                   <option
+                           th:each="categoryResponse: ${servicesCategories}"
+                           th:value="${categoryResponse.categoryId()}"
+                           th:text="${categoryResponse.name()}"
+                   ></option>
+               </select>
 
-        <label for="duration">Duration: </label>
-        <input id="duration"
-               type="text"
-               placeholder="Duration"
-               th:field="*{duration}"
-               class="form-control mb-4 col-4">
+               <label for="duration">Duration: </label>
+               <input id="duration"
+                      type="text"
+                      placeholder="Duration"
+                      th:field="*{duration}"
+                      class="form-control mb-4 col-4">
 
-        <label for="price">Price: </label>
-        <input id="price" type="text"
-               th:field="*{price}" placeholder="Price"
-               class="form-control mb-4 col-4">
+               <label for="price">Price: </label>
+               <input id="price" type="text"
+                      th:field="*{price}" placeholder="Price"
+                      class="form-control mb-4 col-4">
 
-        <label for="file">Product Image:</label>
-        <input type="file"
-               name="file" id="file"
-               class="form-control mb-4 col-4">
+               <label for="file">Product Image:</label>
+               <input type="file"
+                      name="file" id="file"
+                      class="form-control mb-4 col-4">
 
-        <button type="submit" class="btn btn-info col-2">Save Product</button>
-    </form>
+               <button type="submit" class="btn btn-info col-4">Save Product</button>
+           </form>
+       </div>
+       <div class="col-12 mt-5">
+           <div class="accordion" id="galleryImages">
+               <div class="accordion-item">
+                   <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne" aria-expanded="true">
+                            Images
+                        </button>
+                   </h2>
+                   <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                       <div class="accordion-body">
+                           <div>Images</div>
+                           <form>
+                               <label for="gallery">Cover image</label>
+                               <input type="file"
+                                      name="file" id="gallery"
+                                      placeholder="Add cover image"
+                                      class="form-control mb-4 col-4">
+                           </form>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
+
 </div>
 </body>
 </html>

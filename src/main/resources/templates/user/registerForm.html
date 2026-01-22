@@ -17,10 +17,10 @@
                     <h2 class="text-center mb-4 fw-bold">Create Your Account</h2>
                     <p class="text-center text-muted mb-4">Join us and book your beauty serviceEntities easily</p>
 
-<!--                    &lt;!&ndash; Global Error Message (e.g., username taken) &ndash;&gt;-->
-<!--                    <div th:if="${errorMsg != null}" class="alert alert-danger" role="alert">-->
-<!--                        <span th:text="${errorMsg}"></span>-->
-<!--                    </div>-->
+                    <!-- Global Error Message (e.g., username taken) -->
+                    <div th:if="${errorMsg != null}" class="alert alert-danger" role="alert">
+                        <span th:text="${errorMsg}"></span>
+                    </div>
 
 <!--                    &lt;!&ndash; Success Message (optional, if redirected after success) &ndash;&gt;-->
 <!--                    <div th:if="${successMsg != null}" class="alert alert-success" role="alert">-->
@@ -104,6 +104,12 @@
                             <div class="col-md-6 mb-3">
                                 <label for="postCode" class="form-label">Post Code</label>
                                 <input type="text" class="form-control" id="postCode" th:field="*{postCode}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="country" class="form-label">Country</label>
+                                <input type="text" class="form-control" id="country" th:field="*{country}">
                             </div>
                         </div>
 

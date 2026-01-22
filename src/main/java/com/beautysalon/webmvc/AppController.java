@@ -1,20 +1,24 @@
 package com.beautysalon.webmvc;
 
 
-
 import com.beautysalon.user.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.unbescape.html.HtmlEscape;
 
+import java.util.HashSet;
+
+
+@SessionAttributes("merge")
 @Controller
 @RequiredArgsConstructor
 public class AppController {
@@ -22,17 +26,17 @@ public class AppController {
     private final UserServiceImpl userServiceImpl;
 
     @RequestMapping("/")
-    public String mainPage(){
+    public String mainPage() {
         return "home";
     }
 
     @RequestMapping("/home")
-    public String homePage(){
+    public String homePage() {
         return "home";
     }
 
     @GetMapping("/login")
-    public String loginPage(){
+    public String loginPage() {
         return "/user/login";
     }
 
@@ -41,14 +45,14 @@ public class AppController {
         model.addAttribute("errorMessage", "Wrong credentials try again");
         return "/user/login";
     }
+
     @GetMapping("/account")
-    public String accountPage(Authentication authentication, Model model, RedirectAttributes redirectAttributes) {
+    public String accountPage( Authentication authentication, Model model, RedirectAttributes redirectAttributes) {
         if (authentication == null || !authentication.isAuthenticated()) {
             redirectAttributes.addFlashAttribute("errorMessage", "Please log in to access your account.");
             return "redirect:/user/login";
         }
-
-        model.addAttribute("userdetails", userServiceImpl.getLoggedInUserDetails(authentication));
+        model.addAttribute("userDetails", userServiceImpl.getLoggedInUserDetails(authentication));
         return "/account/account";
     }
 
@@ -56,6 +60,7 @@ public class AppController {
     public void simulateError() {
         throw new UsernameNotFoundException("This is a simulated error message");
     }
+
     @RequestMapping("/error.html")
     public String error(HttpServletRequest request, Model model) {
         model.addAttribute("errorCode", "Error " + request.getAttribute("javax.servlet.error.status_code"));

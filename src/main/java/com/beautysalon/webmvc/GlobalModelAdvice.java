@@ -1,6 +1,7 @@
 package com.beautysalon.webmvc;
 
 
+import com.beautysalon.cart.CartItem;
 import com.beautysalon.category.CategoryService;
 import com.beautysalon.category.SubCategory;
 import com.beautysalon.category.dto.CategoryResponse;
@@ -9,7 +10,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -38,5 +41,9 @@ public class GlobalModelAdvice {
         }
     }
 
+    @ModelAttribute("cart")
+    public List<CartItem> initCart() {
+        return new ArrayList<>();
+    }
 
 }

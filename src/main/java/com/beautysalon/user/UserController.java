@@ -4,6 +4,7 @@ package com.beautysalon.user;
 import com.beautysalon.address.AddressServiceImpl;
 import com.beautysalon.user.dto.UserEntityResponse;
 import com.beautysalon.user.dto.UserEntityRequest;
+import com.beautysalon.webmvc.ErrorController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -33,6 +34,7 @@ public class UserController {
     @GetMapping(value = "/register")
     public String registerUser(Model model){
         UserEntityRequest userEntityRequest = new UserEntityRequest();
+//        model.addAttribute("errorMsg" )
         model.addAttribute("user" , userEntityRequest);
         return "/user/registerForm";
     }

@@ -1,180 +1,122 @@
 package com.beautysalon.cart;
 
+import com.beautysalon.common.BaseEntity;
 import com.beautysalon.product.Product;
 import com.beautysalon.product.ProductRepository;
-import com.beautysalon.user.UserServiceImpl;
-import com.beautysalon.user.dto.UserEntityResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CartService {
 
-    private final CartRepository cartRepository;
     private final ProductRepository productRepository;
     private final CartItemRepository cartItemRepository;
-    private final UserServiceImpl userService;
-//    private final CartMapper cartMapper;
 
 
-    public CartResponse getCart(Authentication authentication, HttpSession session) {
-        Cart cart = new Cart();
+    public List<CartItem> addItem(List<CartItem> cart, Long productId, Integer quantity, Authentication authentication) {
+        Optional<Product> product = productRepository.findById(productId);
+       if(product.isPresent()){
+           CartItem newItem = CartItem.builder()
+                   .product(product.get())
+                   .unitPrice(product.get().getPrice())
+                   .quantity(quantity)
+                   .build();
 
-        if (authentication == null) {
-            if (!cartRepository.existsById(session.getId())) {
-                cart.setCartId(session.getId());
-                cart.setCartItems(new HashSet<>());
-                cart.setTotal(0.00);
-            } else {
-                Cart existingSessionCart = cartRepository.findById(session.getId()).orElseThrow(() -> new EntityNotFoundException("No cart found with id " + session.getId()));
-                return mapCartResponse(existingSessionCart);
-            }
-        } else {
-            UserEntityResponse loggedInUser = userService.getLoggedInUserDetails(authentication);
-            if (!cartRepository.existsById(loggedInUser.userId())) {
-                cart.setCartId(loggedInUser.userId());
-                cart.setTotal(0.00);
-                cart.setCartItems(new HashSet<>());
-            } else {
-                Cart existingAuthenticatedCart = cartRepository.findById(loggedInUser.userId()).orElseThrow(() -> new EntityNotFoundException("No cart found with id " + loggedInUser.userId()));
-                return mapCartResponse(existingAuthenticatedCart);
-            }
-        }
-        Cart cartCreated = cartRepository.save(cart);
-        return mapCartResponse(cartCreated);
+           if (authentication != null) {
+               if (cartItemRepository.findCartItemByUsernameAndProductId(authentication.getName(), productId) != null) {
+                   CartItem cartItem = cartItemRepository.findCartItemByUsernameAndProductId(authentication.getName(), productId);
+                   Integer existingQuantity = cartItem.getQuantity();
+                   cartItem.setQuantity(existingQuantity + quantity);
+                   cartItemRepository.save(cartItem);
+               } else {
+                   newItem.setUsername(authentication.getName());
+                   cartItemRepository.save(newItem);
+               }
+           } else {
+               if (!cart.isEmpty()) {
+                   return mergeItemIntoCartItems(cart, newItem);
+               } else {
+                   cart.add(newItem);
+                   return cart;
+               }
+           }
+       }
+        return cart;
     }
 
-    public CartResponse findCart(String cartId) {
-        final Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new EntityNotFoundException("No cart found with id: " + cartId));
-        return this.mapCartResponse(cart);
-    }
-//
-//    @Transactional
-//    public CartResponse addProductToCart(Long productId, Integer quantity, Authentication authentication) {
-//        Customer customer = getOrCreateCustomer(authentication);
-//
-//        Cart cart = cartRepository.findByCustomerId(customer.getId());
-//
-//
-//        Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("No product found with id: " + productId));
-//
-//        if (Objects.equals(product.getInventoryStatus(), InventoryStatus.OutOfStock)) {
-//            throw new RuntimeException("Product is out of stock!");
-//        }
-//        if (product.getStockQuantity() < quantity) {
-//            throw new RuntimeException("You can't add more products to cart than there is available!");
-//        }
-//        Long cartItemId = cartItemService.createCartItem(cart.getId(), product.getId(), quantity);
-//
-//        CartItem cartItem = cartItemRepository
-//                .findById(cartItemId)
-//                .orElseThrow(
-//                        () -> new NoSuchElementException("No cart item found")
-//                );
-//
-//        Set<CartItem> cartProductList = cart.getCartItems();
-//        cartProductList.add(cartItem);
-//        cart.setCartItems(cartProductList);
-//        cart.setTotalPrice(getTotalPrice(cartProductList));
-//
-//        Long cartId = cartRepository.save(cart).getId();
-//
-//        return cartRepository
-//                .findById(cartId)
-//                .map(cartMapper::mapCart)
-//                .orElseThrow(
-//                        () -> new NullPointerException("No cart found with id: " + cartId)
-//                );
-//
-//    }
 
-
-    private Double getTotalPrice(Set<CartItem> cartItems) {
-        double total = 0.00;
+    private List<CartItem> mergeItemIntoCartItems(List<CartItem> cartItems, CartItem newItem) {
+        int counter = 0;
         for (CartItem cartItem : cartItems) {
-            double discount = cartItem.getProduct().getDiscount() / 100;
-            total += cartItem.getSubTotal() - (cartItem.getSubTotal() * discount);
-        }
-        return total;
-    }
-
-    private CartResponse mapCartResponse(Cart cart) {
-        return CartResponse.builder()
-                .cartId(cart.getCartId())
-                .cartItemSet(cart.getCartItems())
-                .total(cart.getTotal())
-                .build();
-    }
-
-    public CartResponse addItemToCart(Authentication authentication, HttpSession session, Long productId, Integer quantity) {
-        CartItem cartItem = new CartItem();
-
-        Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("No product found with id " + productId));
-        cartItem.setQuantity(quantity);
-        cartItem.setProduct(product);
-        cartItem.setSubTotal(quantity * product.getPrice());
-        CartResponse cartResponse = this.getCart(authentication, session);
-        Cart existingCart = cartRepository.findById(cartResponse.getCartId()).orElseThrow(() -> new EntityNotFoundException("No cart found with id: " + cartResponse.getCartId()));
-        cartItem.setCart(existingCart);
-        final CartItem savedItem = cartItemRepository.save(cartItem);
-
-        existingCart.getCartItems().add(savedItem);
-        final Double totalPrice = getTotalPrice(existingCart.getCartItems());
-        existingCart.setTotal(totalPrice);
-
-        final Cart cartSaved = cartRepository.save(existingCart);
-        return mapCartResponse(cartSaved);
-    }
-
-    public void clearCart(Authentication authentication, HttpSession session) {
-        if (authentication != null) {
-            UserEntityResponse loggedInUser = userService.getLoggedInUserDetails(authentication);
-            if (cartRepository.existsById(loggedInUser.userId())) {
-                Cart cart = cartRepository.findById(loggedInUser.userId()).orElseThrow(() -> new EntityNotFoundException("No cart found for userId: " + loggedInUser.userId()));
-                Set<CartItem> cartItems = cart.getCartItems();
-                cartItemRepository.deleteAll(cartItems);
-                cartItems.clear();
-                cart.setCartItems(cartItems);
-                cart.setTotal(0.00);
-                cartRepository.save(cart);
+            if (Objects.equals(cartItem.getProduct().getId(), newItem.getProduct().getId())) {
+                Integer newQuantity = cartItem.getQuantity() + newItem.getQuantity();
+                cartItem.setQuantity(newQuantity);
+                counter++;
             }
-        } else {
-            Cart cart = cartRepository.findById(session.getId()).orElseThrow(() -> new EntityNotFoundException("No cart found for userId: " + session.getId()));
-            Set<CartItem> cartItems = cart.getCartItems();
-            cartItemRepository.deleteAll(cartItems);
-            cartItems.clear();
-            cart.setCartItems(cartItems);
-            cart.setTotal(0.00);
-            cartRepository.save(cart);
+        }
+        if (counter == 0) cartItems.add(newItem);
+
+        return cartItems;
+    }
+
+
+    public List<CartItem> clearCart(List<CartItem> cart, Authentication authentication) {
+        List<CartItem> existingCart = cartItemRepository.findByUsername(authentication.getName());
+        cartItemRepository.deleteAll(existingCart);
+        return existingCart;
+    }
+
+
+    public List<CartItem> mergeCarts(List<CartItem> cart, Authentication authentication, HttpSession session) {
+        Integer counter = (Integer) session.getAttribute("counter");
+        if (counter == null) {
+            counter = 0;
+        }
+        if (counter < 1) {
+            for (CartItem item : cart) {
+                if (cartItemRepository.existsByProductId(item.getProduct().getId()) == null) {
+                    item.setUsername(authentication.getName());
+                    cartItemRepository.save(item);
+                } else {
+                    CartItem existingItem = cartItemRepository.findCartItemByUsernameAndProductId(authentication.getName(), item.getProduct().getId());
+                    Integer newQuantity = existingItem.getQuantity() + item.getQuantity();
+                    existingItem.setQuantity(newQuantity);
+                    cartItemRepository.save(existingItem);
+                }
+            }
+        }
+        counter++;
+        session.setAttribute("counter", counter);
+        return cartItemRepository.findByUsername(authentication.getName());
+    }
+
+    public void removeItem(List<CartItem> cartItems, Long productId, Authentication authentication) {
+        if (authentication != null) {
+            if (cartItemRepository.findCartItemByUsernameAndProductId(authentication.getName(), productId) != null) {
+                cartItemRepository.deleteCartItemByUsernameAndProductId(authentication.getName(), productId);
+            }
         }
     }
 
     public void updateCart(Long cartItemId, String up, String down) {
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new EntityNotFoundException("No cart item found with id: " + cartItemId));
 
-        if (up != null) {
-            final Integer newQuantity = cartItem.getQuantity() + 1;
-            double newSubTotal = newQuantity * cartItem.getProduct().getPrice();
-            cartItem.setQuantity(newQuantity);
-            cartItem.setSubTotal(newSubTotal);
-        }
-        if (down != null) {
-            if (cartItem.getQuantity() > 1) {
-                final Integer newQuantity = cartItem.getQuantity() - 1;
-                double newSubTotal = cartItem.getProduct().getPrice() * newQuantity;
-                cartItem.setQuantity(newQuantity);
-                cartItem.setSubTotal(newSubTotal);
-            } else {
-                throw new IllegalArgumentException("You can not lower quantity if it is 1 or lower");
-            }
-        }
         cartItemRepository.save(cartItem);
     }
+
+    public BigDecimal total(List<CartItem> cart) {
+        return cart.stream()
+                .map(CartItem::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }
+

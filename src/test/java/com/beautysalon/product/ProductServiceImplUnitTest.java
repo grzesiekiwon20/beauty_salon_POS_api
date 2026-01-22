@@ -15,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
+
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceImplUnitTest {
 
@@ -41,13 +43,13 @@ public class ProductServiceImplUnitTest {
         Long id = 1L;
         String name = "Product";
         String description = "Product description";
-        Double price = 10.0;
+        BigDecimal price = new BigDecimal("0.00");
         double discount = 0.00;
         double specialPrice = 0.00;
         String image = "encoded image string value";
         Integer stockQuantity = 1;
         byte[] imageArr = {23, 4, 23, 3, 5, 6, 7, 8, 43, 7, 85, 7, 54, 90, 4, 3, 1, 8};
-        this.categoryTest = Category.builder().id(1L).name("Category").subCategory(SubCategory.Shop).build();
+//        this.categoryTest = Category.builder().id(1L).name("Category").subCategory(SubCategory.Shop).build();
         this.productRequestTest = ProductRequest.builder()
                 .name(name)
                 .description(description)
@@ -59,7 +61,7 @@ public class ProductServiceImplUnitTest {
                 .specialPrice(specialPrice)
                 .build();
         this.productResponseTest = ProductResponse.builder()
-                .id()
+//                .id()
                 .name(name)
                 .description(description)
                 .price(price)

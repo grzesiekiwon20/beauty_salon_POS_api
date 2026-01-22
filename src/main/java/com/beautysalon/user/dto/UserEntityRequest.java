@@ -47,7 +47,9 @@ public class UserEntityRequest {
     @NonNull
     @Pattern(regexp = "^[A-Za-z0-9\\-]{2,10}$")
     private String postCode;
-
+    @NonNull
+    @Size(min= 3, message = "City has to be at least 3 characters long")
+    private String country;
 
 }
 

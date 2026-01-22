@@ -6,14 +6,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-
+@SessionAttributes("cart")
 @Controller
 @RequestMapping("cart")
 @RequiredArgsConstructor
@@ -22,35 +22,32 @@ public class CartController {
     private final CartService service;
 
 
-    @GetMapping("/getCart")
+    @RequestMapping(method = RequestMethod.GET)
     public String createCart(
-            Model model, Authentication authentication, HttpSession session
-    ) {
-        Set<CartItem> cartItems = service.getCart(authentication, session).getCartItemSet();
-        model.addAttribute("cart", service.getCart(authentication, session));
-        model.addAttribute("cartItems", cartItems);
-        return "shopping_cart";
-    }
-
-    @PostMapping("/addItem")
-    public String addItem(
+            @ModelAttribute("cart") List<CartItem> cart,
             Model model,
             Authentication authentication,
-            HttpSession session,
+            HttpSession session
+    ) {
+        if (authentication != null) {
+            cart = service.mergeCarts(cart, authentication, session);
+        }
+        model.addAttribute("cart", cart);
+        model.addAttribute("total" , service.total(cart));
+        return "shopping_cart";
+
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/add")
+    public RedirectView addItem(
+            @ModelAttribute("cart") List<CartItem> cart,
             @RequestParam Long productId,
             @RequestParam(defaultValue = "1") Integer quantity,
-            @RequestParam(required = false) Long categoryId
+            Authentication authentication,
+            RedirectAttributes attributes
     ) {
-        Set<CartItem> set = service.addItemToCart(authentication, session, productId, quantity).getCartItemSet();
-        model.addAttribute("cart", service.getCart(authentication, session));
-        model.addAttribute("cartItems", set);
-        model.addAttribute("categoryId", categoryId);
-        if (categoryId == null) {
-            return "redirect:/products/all";
-        } else {
-            return "redirect:/products/buCategory/{categoryId}";
-        }
-
+        attributes.addFlashAttribute("cart", service.addItem(cart, productId, quantity, authentication));
+        return new RedirectView("/api/cart");
     }
 
     @PostMapping("/update")
@@ -63,11 +60,29 @@ public class CartController {
         return "redirect:/cart/getCart";
     }
 
-    @GetMapping("/clear")
-    public String clearCart(
-            Authentication authentication, HttpSession session
+    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    public RedirectView removeItem(
+            @ModelAttribute("cart") List<CartItem> cart,
+            @RequestParam Long productId,
+            Authentication authentication,
+            RedirectAttributes redirectAttributes
     ) {
-        service.clearCart(authentication, session);
-        return "redirect:/cart/getCart";
+        service.removeItem(cart, productId, authentication);
+        redirectAttributes.addFlashAttribute("cart", cart);
+        return new RedirectView("/api/cart");
+    }
+
+    @GetMapping("/clear")
+    public RedirectView clearCart(
+            @ModelAttribute("cart") List<CartItem> cart,
+            RedirectAttributes redirectAttributes,
+            Authentication authentication
+    ) {
+        if (authentication != null) {
+            redirectAttributes.addFlashAttribute("cart", service.clearCart(cart, authentication));
+        }
+        cart = new ArrayList<>();
+        redirectAttributes.addFlashAttribute("cart", cart);
+        return new RedirectView("/api/cart");
     }
 }

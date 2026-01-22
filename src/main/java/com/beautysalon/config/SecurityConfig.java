@@ -9,6 +9,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -49,10 +50,7 @@ public class SecurityConfig {
                         .requestMatchers("/products/all").permitAll()
                         .requestMatchers("/services/byCategory/{categoryId}").permitAll()
                         .requestMatchers("/services/all").permitAll()
-                        .requestMatchers("/cart/getCart").permitAll()
-                        .requestMatchers("/cart/addItem").permitAll()
-                        .requestMatchers("/cart/clear").permitAll()
-                        .requestMatchers("/cart/update").permitAll()
+                        .requestMatchers("/cart/**").permitAll()
                         .requestMatchers("/activities/addNew").permitAll()
                         .requestMatchers("/activities/save").hasRole("USER")
                         .requestMatchers("/products/addNew").hasRole("ADMIN")
@@ -70,8 +68,8 @@ public class SecurityConfig {
                                 .passwordParameter("password")
                                 .defaultSuccessUrl("/account", true)
                 ).logout(logout ->
-                        logout.logoutUrl("/logout").logoutSuccessUrl("/").permitAll());
-
+                        logout.logoutUrl("/logout")
+                                .logoutSuccessUrl("/").permitAll());
         return http.build();
     }
 

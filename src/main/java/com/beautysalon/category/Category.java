@@ -1,9 +1,11 @@
 package com.beautysalon.category;
 
 
+import com.beautysalon.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
 
 
 @Entity
@@ -13,11 +15,11 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class Category {
+public class Category extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private String name;
     private SubCategory subCategory;
 

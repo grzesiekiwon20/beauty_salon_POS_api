@@ -5,6 +5,7 @@ import com.beautysalon.category.Category;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
 @Builder
 @NoArgsConstructor
@@ -19,7 +20,7 @@ public class ProductRequest
          @Size(min = 6, max = 200)
          private String description;
          @NonNull
-         private Double price;
+         private BigDecimal price;
          private double discount;
          private double specialPrice;
          private Integer stockQuantity;

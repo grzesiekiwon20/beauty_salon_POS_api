@@ -1,13 +1,19 @@
 package com.beautysalon.cart;
 
 
-import java.math.BigDecimal;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.Authentication;
+
 import java.util.List;
 
 public interface ICartService {
-    public List<Cart> getAllCartItems(String userSessionId);
 
-    public Cart saveItem(Cart cart);
+    List<CartItem> addItem(List<CartItem> cartItems, Long productId, Integer quantity, Authentication authentication);
 
-    public boolean deleteItem(Cart cart);
+    List<CartItem> clearCart(List<CartItem> cart, Authentication authentication);
+
+    List<CartItem> mergeCarts(List<CartItem> cart, Authentication authentication, HttpSession session);
+
+
+
 }

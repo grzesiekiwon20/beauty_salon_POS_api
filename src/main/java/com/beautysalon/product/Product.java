@@ -8,6 +8,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Base64;
 
@@ -18,11 +22,12 @@ import java.util.Base64;
 @Getter
 @Entity
 @Builder
-public  class Product extends BaseEntity {
+public  class Product extends BaseEntity  {
+
 
     private String name;
     private String description;
-    private Double price;
+    private BigDecimal price;
     private String image;
     private double discount;
     private double specialPrice;
@@ -32,6 +37,7 @@ public  class Product extends BaseEntity {
     @JoinColumn(name = "category_id")
     @JsonIgnore
     private Category category;
+
 
     public String imageBase64() {
         if (image == null || image.isEmpty()) {

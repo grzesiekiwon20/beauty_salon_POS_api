@@ -52,8 +52,7 @@
                                                 All Products
                                             </a>
                                         </li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" th:href="@{/cart/getCart}">Cart</a></li>
+
                                     </ul>
                                 </li>
                                 <li class="nav-item dropdown">
@@ -75,6 +74,7 @@
                                         </li>
                                     </ul>
                                 </li>
+                                <li class="nav-item"><a  class="nav-link" th:href="@{/cart}">Cart</a></li>
                             </ul>
 
                             <!-- Right Menu -->
@@ -102,7 +102,7 @@
 
     <div class="container-fluid vh-100 mt-5">
         <div class="row">
-            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="col-12">
                 <section layout:fragment="allProducts"></section>
                 <section layout:fragment="allProductsByCategory"></section>
                 <section layout:fragment="home"></section>
